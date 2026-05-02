@@ -25,7 +25,12 @@ export type { SportCode, SportSlug } from './config/sportCodes';
 
 // Types
 export { AuthStatus } from './types/auth';
-export type { WalletState, UserData } from './types/auth';
+export type {
+  WalletState,
+  UserData,
+  AuthMethod,
+  PrivyAuthInfo,
+} from './types/auth';
 export { MarketStatus, statusStringToNumber, CATEGORIES } from './types/market';
 export type {
   MarketStatusString,

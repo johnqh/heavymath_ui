@@ -16,6 +16,7 @@ import {
   useReadContracts,
 } from 'wagmi';
 import { AuthStatus } from '../types/auth';
+import type { AuthMethod, PrivyAuthInfo } from '../types/auth';
 import type { Address } from 'viem';
 import { erc721Abi } from 'viem';
 import { getContractAddress } from '../config/contracts';
@@ -48,6 +49,10 @@ interface AuthContextType {
   isDealer: boolean;
   dealerTokenIds: bigint[];
 
+  // Auth method info
+  authMethod: AuthMethod;
+  userDisplayName?: string;
+
   // Actions
   connect: () => void;
   disconnect: () => void;
@@ -59,9 +64,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
+  /** Optional Privy auth info -- when provided, social/email login skips sign-to-verify */
+  privyAuth?: PrivyAuthInfo;
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children, privyAuth }: AuthProviderProps) {
   const {
     address,
     chainId,
@@ -78,13 +85,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [verificationVersion, setVerificationVersion] = useState(0);
 
   // Compute isVerified from localStorage (derived state, not effect-based)
+  // For Privy-authenticated users, skip localStorage check
   const isVerified = useMemo(() => {
     // verificationVersion is used to trigger re-computation after signing
     void verificationVersion;
     if (!address) return false;
+    if (privyAuth?.isAuthenticated && isConnected) return true;
     const storedAddress = localStorage.getItem(STORAGE_KEY);
     return storedAddress === address;
-  }, [address, verificationVersion]);
+  }, [address, verificationVersion, privyAuth?.isAuthenticated, isConnected]);
 
   // Map wagmi status to our AuthStatus
   const status = useMemo(() => {
@@ -108,7 +117,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     disconnect();
     localStorage.removeItem(STORAGE_KEY);
     setVerificationVersion(v => v + 1);
-  }, [disconnect]);
+    if (privyAuth?.isAuthenticated) {
+      privyAuth.logout().catch(console.error);
+    }
+  }, [disconnect, privyAuth]);
 
   // Sign verification message
   const signVerificationMessage = useCallback(async (): Promise<boolean> => {
@@ -186,6 +198,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     status,
     isDealer,
     dealerTokenIds,
+    authMethod: privyAuth?.isAuthenticated ? privyAuth.authMethod : 'wallet',
+    userDisplayName: privyAuth?.isAuthenticated
+      ? privyAuth.userDisplayName
+      : undefined,
     connect: handleConnect,
     disconnect: handleDisconnect,
     switchChain: handleSwitchChain,

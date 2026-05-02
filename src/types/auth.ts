@@ -46,3 +46,22 @@ export interface UserData {
   /** Token IDs of Dealer NFTs owned by the user */
   dealerTokenIds: bigint[];
 }
+
+/** How the user authenticated: direct wallet connection or via a social/email provider */
+export type AuthMethod = 'wallet' | 'privy';
+
+/**
+ * Information about a Privy-authenticated session.
+ * Passed from the consuming app to AuthProvider so heavymath_ui
+ * stays Privy-agnostic (no @privy-io imports).
+ */
+export interface PrivyAuthInfo {
+  /** Whether user is authenticated via Privy (email/social) */
+  isAuthenticated: boolean;
+  /** Auth method used */
+  authMethod: AuthMethod;
+  /** Display label, e.g. email address or "Google" */
+  userDisplayName?: string;
+  /** Privy logout function */
+  logout: () => Promise<void>;
+}

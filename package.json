@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/heavymath_ui",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Shared UI components, hooks, and utilities for Heavymath prediction market apps",
   "type": "module",
   "main": "dist/index.js",

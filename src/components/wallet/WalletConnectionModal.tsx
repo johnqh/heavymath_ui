@@ -1,4 +1,11 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+  type ReactNode,
+} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useConnect, useDisconnect, type Connector } from 'wagmi';
@@ -90,11 +97,14 @@ const getConnectorName = (connector: Connector): string => {
 interface WalletConnectionModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** Optional social login section rendered above wallet connectors */
+  socialLoginSection?: ReactNode;
 }
 
 export function WalletConnectionModal({
   isOpen,
   onClose,
+  socialLoginSection,
 }: WalletConnectionModalProps) {
   const { lang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
@@ -417,47 +427,64 @@ export function WalletConnectionModal({
         </div>
 
         {step === 'connect' ? (
-          <WalletConnectScreen
-            evmWallets={evmWallets}
-            solanaWallets={solanaWallets}
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            connectingWallet={connectingWallet}
-            isAutoConnecting={false}
-            error={error}
-            browserSupportsExtensions={browserSupportsExtensions}
-            labels={{
-              ethereum: t('tabLabels.ethereum', 'Ethereum'),
-              solana: t('tabLabels.solana', 'Solana'),
-              available: t('walletStatus.available', 'Available'),
-              notAvailable: t('walletStatus.notAvailable', 'Not Available'),
-              noWalletText: t('noWalletLinks.noWallet', "Don't have a wallet?"),
-              installMetaMask: t(
-                'noWalletLinks.installMetaMask',
-                'Install MetaMask'
-              ),
-              installPhantom: t(
-                'noWalletLinks.installPhantom',
-                'Install Phantom'
-              ),
-              autoConnectTitle: t(
-                'walletBrowserAutoConnect.title',
-                'Connecting to your wallet...'
-              ),
-              autoConnectDescription: t(
-                'walletBrowserAutoConnect.description',
-                'We detected you are using a wallet browser. Automatically connecting...'
-              ),
-              extensionsNotSupported: t(
-                'browserCompatibility.extensionsNotSupported',
-                'Solana wallets require browser extension support'
-              ),
-              useChromeForSolana: t(
-                'browserCompatibility.useChromeForSolana',
-                'Please use Chrome, Firefox, or Edge to connect Solana wallets'
-              ),
-            }}
-          />
+          <>
+            {socialLoginSection && (
+              <>
+                {socialLoginSection}
+                <div className='flex items-center gap-3 my-4'>
+                  <div className='flex-1 border-t border-gray-200 dark:border-gray-700' />
+                  <span className='text-xs text-gray-500 dark:text-gray-400 uppercase font-medium'>
+                    {t('socialLogin.dividerText', 'OR')}
+                  </span>
+                  <div className='flex-1 border-t border-gray-200 dark:border-gray-700' />
+                </div>
+              </>
+            )}
+            <WalletConnectScreen
+              evmWallets={evmWallets}
+              solanaWallets={solanaWallets}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              connectingWallet={connectingWallet}
+              isAutoConnecting={false}
+              error={error}
+              browserSupportsExtensions={browserSupportsExtensions}
+              labels={{
+                ethereum: t('tabLabels.ethereum', 'Ethereum'),
+                solana: t('tabLabels.solana', 'Solana'),
+                available: t('walletStatus.available', 'Available'),
+                notAvailable: t('walletStatus.notAvailable', 'Not Available'),
+                noWalletText: t(
+                  'noWalletLinks.noWallet',
+                  "Don't have a wallet?"
+                ),
+                installMetaMask: t(
+                  'noWalletLinks.installMetaMask',
+                  'Install MetaMask'
+                ),
+                installPhantom: t(
+                  'noWalletLinks.installPhantom',
+                  'Install Phantom'
+                ),
+                autoConnectTitle: t(
+                  'walletBrowserAutoConnect.title',
+                  'Connecting to your wallet...'
+                ),
+                autoConnectDescription: t(
+                  'walletBrowserAutoConnect.description',
+                  'We detected you are using a wallet browser. Automatically connecting...'
+                ),
+                extensionsNotSupported: t(
+                  'browserCompatibility.extensionsNotSupported',
+                  'Solana wallets require browser extension support'
+                ),
+                useChromeForSolana: t(
+                  'browserCompatibility.useChromeForSolana',
+                  'Please use Chrome, Firefox, or Edge to connect Solana wallets'
+                ),
+              }}
+            />
+          </>
         ) : (
           <WalletVerifyScreen
             walletAddress={address || ''}
