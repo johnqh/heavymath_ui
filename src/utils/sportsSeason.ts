@@ -8,7 +8,7 @@ export function formatSeasonLabel(value: string | number): string {
 }
 
 export function normalizeSeasonSortValue(value: string | number): number {
-  if (typeof value === 'number') return value;
+  if (typeof value === "number") return value;
 
   const matches = value.match(/\d{4}/g);
   if (matches && matches.length > 0) {
@@ -21,11 +21,11 @@ export function normalizeSeasonSortValue(value: string | number): number {
 
 export function buildSeasonOptions<T>(
   seasons: T[],
-  getValue: (season: T) => string | number
+  getValue: (season: T) => string | number,
 ): SeasonOption[] {
   const uniqueOptions = new Map<string, SeasonOption>();
 
-  seasons.forEach(season => {
+  seasons.forEach((season) => {
     const rawValue = getValue(season);
     const value = String(rawValue);
 
@@ -38,22 +38,26 @@ export function buildSeasonOptions<T>(
   });
 
   return Array.from(uniqueOptions.values()).sort(
-    (a, b) => normalizeSeasonSortValue(b.value) - normalizeSeasonSortValue(a.value)
+    (a, b) =>
+      normalizeSeasonSortValue(b.value) - normalizeSeasonSortValue(a.value),
   );
 }
 
 export function hasSeasonValue<T>(
   seasons: T[],
   selectedSeason: string | undefined,
-  getValue: (season: T) => string | number
+  getValue: (season: T) => string | number,
 ): boolean {
   if (!selectedSeason) return false;
 
-  return seasons.some(season => String(getValue(season)) === selectedSeason);
+  return seasons.some((season) => String(getValue(season)) === selectedSeason);
 }
 
-export function getNumericSeasonValue(season: string | number, fallback: number): number {
-  if (typeof season === 'number') return season;
+export function getNumericSeasonValue(
+  season: string | number,
+  fallback: number,
+): number {
+  if (typeof season === "number") return season;
 
   const parsed = Number.parseInt(season, 10);
   return Number.isNaN(parsed) ? fallback : parsed;

@@ -1,12 +1,17 @@
-import { useMemo } from 'react';
-import { usePublicClient, useConfig } from 'wagmi';
-import { getPublicClient, getWalletClient, switchChain } from 'wagmi/actions';
-import type { Config } from 'wagmi';
-import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
-import { EVMPredictionClient } from '../lib/evmClient';
-import type { Address } from 'viem';
-import { getContractAddress } from '../config/contracts';
-import { getAppConfig } from '../config/app';
+import { useMemo } from "react";
+import { usePublicClient, useConfig } from "wagmi";
+import { getPublicClient, getWalletClient, switchChain } from "wagmi/actions";
+import type { Config } from "wagmi";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from "@tanstack/react-query";
+import { EVMPredictionClient } from "../lib/evmClient";
+import type { Address } from "viem";
+import { getContractAddress } from "../config/contracts";
+import { getAppConfig } from "../config/app";
 
 /**
  * Invalidate query keys immediately and again after delays to account for
@@ -49,10 +54,13 @@ function getClient(chainId: number): EVMPredictionClient | null {
   const cached = clientCache.get(chainId);
   if (cached) return cached;
 
-  const predictionMarket = getContractAddress(chainId, 'predictionMarket');
-  const usdc = getContractAddress(chainId, 'usdc');
+  const predictionMarket = getContractAddress(chainId, "predictionMarket");
+  const usdc = getContractAddress(chainId, "usdc");
 
-  if (!predictionMarket || predictionMarket === '0x0000000000000000000000000000000000000000') {
+  if (
+    !predictionMarket ||
+    predictionMarket === "0x0000000000000000000000000000000000000000"
+  ) {
     return null;
   }
 
@@ -118,7 +126,7 @@ export function usePlacePrediction() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.placePrediction(
@@ -129,17 +137,17 @@ export function usePlacePrediction() {
         },
         marketId,
         percentage,
-        amount
+        amount,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'market'],
-        ['heavymath', 'market-predictions'],
-        ['heavymath', 'predictions'],
+        ["heavymath", "markets"],
+        ["heavymath", "market"],
+        ["heavymath", "market-predictions"],
+        ["heavymath", "predictions"],
       ]);
     },
     meta: {
@@ -173,7 +181,7 @@ export function useUpdatePrediction() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.updatePrediction(
@@ -184,17 +192,17 @@ export function useUpdatePrediction() {
         },
         marketId,
         newPercentage,
-        additionalAmount
+        additionalAmount,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'market'],
-        ['heavymath', 'market-predictions'],
-        ['heavymath', 'predictions'],
+        ["heavymath", "markets"],
+        ["heavymath", "market"],
+        ["heavymath", "market-predictions"],
+        ["heavymath", "predictions"],
       ]);
     },
     meta: {
@@ -219,7 +227,7 @@ export function useWithdrawPrediction() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.withdrawPrediction(
@@ -228,17 +236,17 @@ export function useWithdrawPrediction() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'market'],
-        ['heavymath', 'market-predictions'],
-        ['heavymath', 'predictions'],
+        ["heavymath", "markets"],
+        ["heavymath", "market"],
+        ["heavymath", "market-predictions"],
+        ["heavymath", "predictions"],
       ]);
     },
     meta: {
@@ -263,7 +271,7 @@ export function useClaimWinnings() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.claimWinnings(
@@ -272,16 +280,16 @@ export function useClaimWinnings() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'predictions'],
-        ['heavymath', 'market'],
-        ['heavymath', 'withdrawals'],
+        ["heavymath", "predictions"],
+        ["heavymath", "market"],
+        ["heavymath", "withdrawals"],
       ]);
     },
     meta: {
@@ -306,7 +314,7 @@ export function useClaimRefund() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.claimRefund(
@@ -315,15 +323,15 @@ export function useClaimRefund() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'predictions'],
-        ['heavymath', 'market'],
+        ["heavymath", "predictions"],
+        ["heavymath", "market"],
       ]);
     },
     meta: {
@@ -344,7 +352,7 @@ export function useOnChainMarket(marketId: bigint | undefined) {
   const client = useEVMClient();
 
   return useQuery({
-    queryKey: ['onChainMarket', chainId, marketId?.toString()],
+    queryKey: ["onChainMarket", chainId, marketId?.toString()],
     queryFn: async () => {
       if (!client || !publicClient || marketId === undefined) {
         return null;
@@ -362,13 +370,16 @@ export function useOnChainMarket(marketId: bigint | undefined) {
  * @param account - The user's wallet address, or undefined to skip
  * @returns TanStack query result with prediction data (amount, percentage, placedAt, claimed)
  */
-export function useOnChainPrediction(marketId: bigint | undefined, account: Address | undefined) {
+export function useOnChainPrediction(
+  marketId: bigint | undefined,
+  account: Address | undefined,
+) {
   const publicClient = usePublicClient();
   const chainId = getAppConfig().defaultChainId;
   const client = useEVMClient();
 
   return useQuery({
-    queryKey: ['onChainPrediction', chainId, marketId?.toString(), account],
+    queryKey: ["onChainPrediction", chainId, marketId?.toString(), account],
     queryFn: async () => {
       if (!client || !publicClient || marketId === undefined || !account) {
         return null;
@@ -397,7 +408,7 @@ export function useLockMarket() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.lockMarket(
@@ -406,16 +417,16 @@ export function useLockMarket() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'market'],
-        ['onChainMarket'],
+        ["heavymath", "markets"],
+        ["heavymath", "market"],
+        ["onChainMarket"],
       ]);
     },
     meta: {
@@ -441,7 +452,7 @@ export function useClaimLockRefund() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.claimLockRefund(
@@ -450,16 +461,16 @@ export function useClaimLockRefund() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'predictions'],
-        ['heavymath', 'market'],
-        ['onChainMarket'],
+        ["heavymath", "predictions"],
+        ["heavymath", "market"],
+        ["onChainMarket"],
       ]);
     },
     meta: {
@@ -475,13 +486,16 @@ export function useClaimLockRefund() {
  * @param account - The user's wallet address, or undefined to skip
  * @returns TanStack query result with refund amount
  */
-export function useLockRefundAmount(marketId: bigint | undefined, account: Address | undefined) {
+export function useLockRefundAmount(
+  marketId: bigint | undefined,
+  account: Address | undefined,
+) {
   const publicClient = usePublicClient();
   const chainId = getAppConfig().defaultChainId;
   const client = useEVMClient();
 
   return useQuery({
-    queryKey: ['lockRefundAmount', chainId, marketId?.toString(), account],
+    queryKey: ["lockRefundAmount", chainId, marketId?.toString(), account],
     queryFn: async () => {
       if (!client || !publicClient || marketId === undefined || !account) {
         return 0n;
@@ -505,7 +519,7 @@ export function useMarketSplit(marketId: bigint | undefined) {
   const client = useEVMClient();
 
   return useQuery({
-    queryKey: ['marketSplit', chainId, marketId?.toString()],
+    queryKey: ["marketSplit", chainId, marketId?.toString()],
     queryFn: async () => {
       if (!client || !publicClient || marketId === undefined) {
         return null;
@@ -528,7 +542,7 @@ export function useTestMode() {
   const client = useEVMClient();
 
   return useQuery({
-    queryKey: ['testMode', chainId],
+    queryKey: ["testMode", chainId],
     queryFn: async () => {
       if (!client || !publicClient) {
         return false;
@@ -543,11 +557,11 @@ export function useTestMode() {
 /** Minimal ABI for reading PredictionMarket.owner() (from OwnableUpgradeable) */
 const OWNER_ABI = [
   {
-    name: 'owner',
-    type: 'function',
-    stateMutability: 'view',
+    name: "owner",
+    type: "function",
+    stateMutability: "view",
     inputs: [],
-    outputs: [{ name: '', type: 'address' }],
+    outputs: [{ name: "", type: "address" }],
   },
 ] as const;
 
@@ -560,27 +574,33 @@ const OWNER_ABI = [
 export function useContractOwner() {
   const config = useConfig();
   const chainId = getAppConfig().defaultChainId;
-  const predictionMarketAddress = getContractAddress(chainId, 'predictionMarket');
+  const predictionMarketAddress = getContractAddress(
+    chainId,
+    "predictionMarket",
+  );
 
   const query = useQuery({
-    queryKey: ['contractOwner', chainId],
+    queryKey: ["contractOwner", chainId],
     queryFn: async () => {
       if (!predictionMarketAddress) return null;
-      if (predictionMarketAddress === '0x0000000000000000000000000000000000000000') return null;
+      if (
+        predictionMarketAddress === "0x0000000000000000000000000000000000000000"
+      )
+        return null;
       const publicClient = getPublicClient(config, { chainId });
       if (!publicClient) return null;
       const result = await publicClient.readContract({
         address: predictionMarketAddress,
         abi: OWNER_ABI,
-        functionName: 'owner',
+        functionName: "owner",
       });
       console.log(
-        '[useContractOwner] owner:',
+        "[useContractOwner] owner:",
         result,
-        'chain:',
+        "chain:",
         chainId,
-        'contract:',
-        predictionMarketAddress
+        "contract:",
+        predictionMarketAddress,
       );
       return result as `0x${string}`;
     },
@@ -589,7 +609,7 @@ export function useContractOwner() {
   });
 
   if (query.error) {
-    console.error('[useContractOwner] error:', query.error);
+    console.error("[useContractOwner] error:", query.error);
   }
 
   return query;
@@ -598,11 +618,11 @@ export function useContractOwner() {
 /** Minimal ABI for reading OracleResolver.pendingResolution(uint256) */
 const PENDING_RESOLUTION_ABI = [
   {
-    name: 'pendingResolution',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    outputs: [{ name: '', type: 'bool' }],
+    name: "pendingResolution",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "marketId", type: "uint256" }],
+    outputs: [{ name: "", type: "bool" }],
   },
 ] as const;
 
@@ -620,29 +640,32 @@ const PENDING_RESOLUTION_ABI = [
 export function usePendingResolution(marketId: bigint | undefined) {
   const publicClient = usePublicClient();
   const chainId = getAppConfig().defaultChainId;
-  const oracleResolverAddress = getContractAddress(chainId, 'oracleResolver');
+  const oracleResolverAddress = getContractAddress(chainId, "oracleResolver");
 
   return useQuery({
-    queryKey: ['pendingResolution', chainId, marketId?.toString()],
+    queryKey: ["pendingResolution", chainId, marketId?.toString()],
     queryFn: async () => {
       if (!publicClient || marketId === undefined || !oracleResolverAddress) {
         return false;
       }
       // Skip if oracle resolver is the zero address (not deployed)
-      if (oracleResolverAddress === '0x0000000000000000000000000000000000000000') {
+      if (
+        oracleResolverAddress === "0x0000000000000000000000000000000000000000"
+      ) {
         return false;
       }
       const result = await publicClient.readContract({
         address: oracleResolverAddress,
         abi: PENDING_RESOLUTION_ABI,
-        functionName: 'pendingResolution',
+        functionName: "pendingResolution",
         args: [marketId],
       });
       return result as boolean;
     },
-    enabled: !!publicClient && marketId !== undefined && !!oracleResolverAddress,
+    enabled:
+      !!publicClient && marketId !== undefined && !!oracleResolverAddress,
     // Poll every 10s while pending, stop when not pending
-    refetchInterval: query => (query.state.data === true ? 10_000 : false),
+    refetchInterval: (query) => (query.state.data === true ? 10_000 : false),
   });
 }
 
@@ -678,7 +701,7 @@ export function useCreateMarket() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.createMarket(
@@ -695,15 +718,15 @@ export function useCreateMarket() {
           description,
           oracleId,
           conditionData,
-        }
+        },
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'dealer'],
+        ["heavymath", "markets"],
+        ["heavymath", "dealer"],
       ]);
     },
     meta: {
@@ -734,7 +757,7 @@ export function useResolveMarket() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.resolveMarket(
@@ -744,16 +767,16 @@ export function useResolveMarket() {
           chain: publicClient.chain,
         },
         marketId,
-        positiveOutcome
+        positiveOutcome,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'market'],
-        ['heavymath', 'market-history'],
+        ["heavymath", "markets"],
+        ["heavymath", "market"],
+        ["heavymath", "market-history"],
       ]);
     },
     meta: {
@@ -778,7 +801,7 @@ export function useResolveMarketWithOracle() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.resolveMarketWithOracle(
@@ -787,16 +810,16 @@ export function useResolveMarketWithOracle() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'market'],
-        ['heavymath', 'market-history'],
+        ["heavymath", "markets"],
+        ["heavymath", "market"],
+        ["heavymath", "market-history"],
       ]);
     },
     meta: {
@@ -822,7 +845,7 @@ export function useRequestOracleResolution() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.requestOracleResolution(
@@ -831,13 +854,13 @@ export function useRequestOracleResolution() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
-      invalidateWithRetry(queryClient, [['heavymath', 'oracle-requests']]);
+      invalidateWithRetry(queryClient, [["heavymath", "oracle-requests"]]);
     },
     meta: {
       chainId,
@@ -862,7 +885,7 @@ export function useCompleteOracleResolution() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.completeOracleResolution(
@@ -871,16 +894,16 @@ export function useCompleteOracleResolution() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'market'],
-        ['heavymath', 'market-history'],
+        ["heavymath", "markets"],
+        ["heavymath", "market"],
+        ["heavymath", "market-history"],
       ]);
     },
     meta: {
@@ -905,7 +928,7 @@ export function useCancelMarket() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.cancelMarket(
@@ -914,16 +937,16 @@ export function useCancelMarket() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'markets'],
-        ['heavymath', 'market'],
-        ['heavymath', 'market-history'],
+        ["heavymath", "markets"],
+        ["heavymath", "market"],
+        ["heavymath", "market-history"],
       ]);
     },
     meta: {
@@ -948,7 +971,7 @@ export function useWithdrawDealerFees() {
       const { walletClient, publicClient } = await getClients(config, chainId);
 
       if (!client || !walletClient || !publicClient) {
-        throw new Error('Client not available');
+        throw new Error("Client not available");
       }
 
       const result = await client.withdrawDealerFees(
@@ -957,15 +980,15 @@ export function useWithdrawDealerFees() {
           publicClient,
           chain: publicClient.chain,
         },
-        marketId
+        marketId,
       );
 
       return result;
     },
     onSuccess: () => {
       invalidateWithRetry(queryClient, [
-        ['heavymath', 'withdrawals'],
-        ['heavymath', 'market'],
+        ["heavymath", "withdrawals"],
+        ["heavymath", "market"],
       ]);
     },
     meta: {

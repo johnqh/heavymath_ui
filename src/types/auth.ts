@@ -4,18 +4,18 @@
  * Uses `as const` objects instead of enums due to `erasableSyntaxOnly` in tsconfig.
  */
 
-import type { Address } from 'viem';
+import type { Address } from "viem";
 
 /**
  * Authentication status constants.
  * Tracks the progression of wallet connection and verification.
  */
 export const AuthStatus = {
-  Disconnected: 'DISCONNECTED',
-  Connecting: 'CONNECTING',
-  Connected: 'CONNECTED',
-  Verified: 'VERIFIED',
-  Error: 'ERROR',
+  Disconnected: "DISCONNECTED",
+  Connecting: "CONNECTING",
+  Connected: "CONNECTED",
+  Verified: "VERIFIED",
+  Error: "ERROR",
 } as const;
 
 /** Union type of all possible authentication status values */

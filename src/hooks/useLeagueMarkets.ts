@@ -4,22 +4,23 @@
  * client-side by oracleId encoding. Same approach as useGameMarkets.
  */
 
-import { useQuery } from '@tanstack/react-query';
-import type { IndexerClient } from '@heavymath/indexer_client';
-import { encodeOracleId, isValidSportsOracleId } from '../utils/oracleId';
-import { CATEGORIES } from '../types/market';
-import type { SportCode } from '../config/sportCodes';
+import { useQuery } from "@tanstack/react-query";
+import type { IndexerClient } from "@heavymath/indexer_client";
+import { encodeOracleId, isValidSportsOracleId } from "../utils/oracleId";
+import { CATEGORIES } from "../types/market";
+import type { SportCode } from "../config/sportCodes";
 
 export function useLeagueMarkets(
   indexerClient: IndexerClient,
   sportCode: SportCode,
   leagueId: number | undefined,
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean },
 ) {
-  const targetOracleId = leagueId !== undefined ? encodeOracleId(sportCode, leagueId) : undefined;
+  const targetOracleId =
+    leagueId !== undefined ? encodeOracleId(sportCode, leagueId) : undefined;
 
   return useQuery({
-    queryKey: ['leagueMarkets', sportCode, leagueId],
+    queryKey: ["leagueMarkets", sportCode, leagueId],
     queryFn: async () => {
       const response = await indexerClient.getMarkets({
         category: CATEGORIES.SPORTS,
@@ -30,7 +31,7 @@ export function useLeagueMarkets(
 
       if (!targetOracleId) return [];
 
-      return markets.filter(market => {
+      return markets.filter((market) => {
         if (!market.oracleId) return false;
         try {
           const normalized = market.oracleId.toLowerCase();

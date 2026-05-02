@@ -4,10 +4,10 @@
  * Always use the `useIndexer()` hook to access the client rather than constructing one directly.
  */
 
-import { createContext, useContext, useMemo, type ReactNode } from 'react';
-import { webNetworkClient } from '@sudobility/di';
-import { IndexerClient } from '@heavymath/indexer_client';
-import { getAppConfig } from '../config/app';
+import { createContext, useContext, useMemo, type ReactNode } from "react";
+import { webNetworkClient } from "@sudobility/di";
+import { IndexerClient } from "@heavymath/indexer_client";
+import { getAppConfig } from "../config/app";
 
 /** Shape of the IndexerContext value */
 interface IndexerContextType {
@@ -32,14 +32,16 @@ interface IndexerProviderProps {
 export function IndexerProvider({ children }: IndexerProviderProps) {
   const indexerClient = useMemo(
     () => new IndexerClient(getAppConfig().indexerUrl, webNetworkClient),
-    []
+    [],
   );
 
   const value: IndexerContextType = {
     indexerClient,
   };
 
-  return <IndexerContext.Provider value={value}>{children}</IndexerContext.Provider>;
+  return (
+    <IndexerContext.Provider value={value}>{children}</IndexerContext.Provider>
+  );
 }
 
 /**
@@ -49,11 +51,10 @@ export function IndexerProvider({ children }: IndexerProviderProps) {
  * @returns Object containing the shared indexerClient instance
  * @throws Error if used outside of IndexerProvider
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useIndexer() {
   const context = useContext(IndexerContext);
   if (context === undefined) {
-    throw new Error('useIndexer must be used within an IndexerProvider');
+    throw new Error("useIndexer must be used within an IndexerProvider");
   }
   return context;
 }

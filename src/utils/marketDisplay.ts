@@ -6,22 +6,22 @@
  */
 
 const CATEGORY_LABELS: Record<string, string> = {
-  '1': 'Sports',
-  '2': 'Crypto',
-  '3': 'Events',
+  "1": "Sports",
+  "2": "Crypto",
+  "3": "Events",
 };
 
 const SPORT_LABELS: Record<string, string> = {
-  '1': 'Soccer',
-  '2': 'Basketball',
-  '3': 'NFL',
-  '4': 'Baseball',
-  '5': 'Hockey',
-  '6': 'Rugby',
-  '7': 'Formula 1',
-  '8': 'MMA',
-  '9': 'Handball',
-  '10': 'Volleyball',
+  "1": "Soccer",
+  "2": "Basketball",
+  "3": "NFL",
+  "4": "Baseball",
+  "5": "Hockey",
+  "6": "Rugby",
+  "7": "Formula 1",
+  "8": "MMA",
+  "9": "Handball",
+  "10": "Volleyball",
 };
 
 export interface MarketDisplayInfo {
@@ -47,17 +47,18 @@ export function getMarketDisplayInfo(market: {
   description?: string | null;
 }): MarketDisplayInfo {
   // title is stored as "category-subCategory" (e.g., "1-1")
-  const titleParts = (market.title || '').split('-');
+  const titleParts = (market.title || "").split("-");
   const categoryNum = titleParts[0];
   const subCategoryNum = titleParts[1];
 
   const category = CATEGORY_LABELS[categoryNum];
-  const subcategory = categoryNum === '1' ? SPORT_LABELS[subCategoryNum] : undefined;
+  const subcategory =
+    categoryNum === "1" ? SPORT_LABELS[subCategoryNum] : undefined;
 
   // description stores: "meaningful title\nfull description with league and date"
-  const lines = (market.description || '').split('\n');
+  const lines = (market.description || "").split("\n");
   const firstLine = lines[0]?.trim();
-  const restLines = lines.slice(1).join(' ').trim();
+  const restLines = lines.slice(1).join(" ").trim();
 
   const displayTitle = firstLine || market.title || `Market #${market.id}`;
   const displaySubtitle = restLines || undefined;

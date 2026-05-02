@@ -4,239 +4,246 @@
  * Handles ERC-20 allowance approval, transaction execution, and contract reads.
  */
 
-import type { Abi, Address, Chain, Hash, PublicClient, WalletClient } from 'viem';
-import { erc20Abi, getAddress } from 'viem';
+import type {
+  Abi,
+  Address,
+  Chain,
+  Hash,
+  PublicClient,
+  WalletClient,
+} from "viem";
+import { erc20Abi, getAddress } from "viem";
 
 // PredictionMarket ABI - minimal subset needed for our operations
 const predictionMarketAbi = [
   {
     inputs: [
-      { name: 'tokenId', type: 'uint256' },
-      { name: 'category', type: 'uint256' },
-      { name: 'subCategory', type: 'uint256' },
-      { name: 'deadline', type: 'uint256' },
-      { name: 'description', type: 'string' },
-      { name: 'oracleId', type: 'bytes32' },
+      { name: "tokenId", type: "uint256" },
+      { name: "category", type: "uint256" },
+      { name: "subCategory", type: "uint256" },
+      { name: "deadline", type: "uint256" },
+      { name: "description", type: "string" },
+      { name: "oracleId", type: "bytes32" },
     ],
-    name: 'createMarket',
+    name: "createMarket",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
-      { name: 'tokenId', type: 'uint256' },
-      { name: 'category', type: 'uint256' },
-      { name: 'subCategory', type: 'uint256' },
-      { name: 'deadline', type: 'uint256' },
-      { name: 'description', type: 'string' },
-      { name: 'oracleId', type: 'bytes32' },
-      { name: 'conditionData', type: 'bytes32' },
+      { name: "tokenId", type: "uint256" },
+      { name: "category", type: "uint256" },
+      { name: "subCategory", type: "uint256" },
+      { name: "deadline", type: "uint256" },
+      { name: "description", type: "string" },
+      { name: "oracleId", type: "bytes32" },
+      { name: "conditionData", type: "bytes32" },
     ],
-    name: 'createMarketWithCondition',
+    name: "createMarketWithCondition",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
-      { name: 'marketId', type: 'uint256' },
-      { name: 'percentage', type: 'uint256' },
-      { name: 'amount', type: 'uint256' },
+      { name: "marketId", type: "uint256" },
+      { name: "percentage", type: "uint256" },
+      { name: "amount", type: "uint256" },
     ],
-    name: 'placePrediction',
+    name: "placePrediction",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
-      { name: 'marketId', type: 'uint256' },
-      { name: 'newPercentage', type: 'uint256' },
-      { name: 'additionalAmount', type: 'uint256' },
+      { name: "marketId", type: "uint256" },
+      { name: "newPercentage", type: "uint256" },
+      { name: "additionalAmount", type: "uint256" },
     ],
-    name: 'updatePrediction',
+    name: "updatePrediction",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'withdrawPrediction',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "withdrawPrediction",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'cancelMarket',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "cancelMarket",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'abandonMarket',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "abandonMarket",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
-      { name: 'marketId', type: 'uint256' },
-      { name: 'positiveOutcome', type: 'bool' },
+      { name: "marketId", type: "uint256" },
+      { name: "positiveOutcome", type: "bool" },
     ],
-    name: 'resolveMarket',
+    name: "resolveMarket",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'resolveMarketWithOracle',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "resolveMarketWithOracle",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'requestOracleResolution',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "requestOracleResolution",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'completeOracleResolution',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "completeOracleResolution",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'claimWinnings',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "claimWinnings",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'claimRefund',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "claimRefund",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'lockMarket',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "lockMarket",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'calculateMarketSplit',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "calculateMarketSplit",
     outputs: [
-      { name: 'negPct', type: 'uint256' },
-      { name: 'posPct', type: 'uint256' },
-      { name: 'negAmt', type: 'uint256' },
-      { name: 'posAmt', type: 'uint256' },
-      { name: 'valid', type: 'bool' },
+      { name: "negPct", type: "uint256" },
+      { name: "posPct", type: "uint256" },
+      { name: "negAmt", type: "uint256" },
+      { name: "posAmt", type: "uint256" },
+      { name: "valid", type: "bool" },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'lockRefunds',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "lockRefunds",
     outputs: [
-      { name: 'negativePercentage', type: 'uint256' },
-      { name: 'positivePercentage', type: 'uint256' },
-      { name: 'negativeAllowedAmount', type: 'uint256' },
-      { name: 'positiveAllowedAmount', type: 'uint256' },
+      { name: "negativePercentage", type: "uint256" },
+      { name: "positivePercentage", type: "uint256" },
+      { name: "negativeAllowedAmount", type: "uint256" },
+      { name: "positiveAllowedAmount", type: "uint256" },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'claimLockRefund',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "claimLockRefund",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
-      { name: 'marketId', type: 'uint256' },
-      { name: 'predictor', type: 'address' },
+      { name: "marketId", type: "uint256" },
+      { name: "predictor", type: "address" },
     ],
-    name: 'getLockRefundAmount',
-    outputs: [{ name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
+    name: "getLockRefundAmount",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'withdrawDealerFees',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "withdrawDealerFees",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [],
-    name: 'withdrawSystemFees',
+    name: "withdrawSystemFees",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [],
-    name: 'stakeToken',
-    outputs: [{ name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
+    name: "stakeToken",
+    outputs: [{ name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [],
-    name: 'testMode',
-    outputs: [{ name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
+    name: "testMode",
+    outputs: [{ name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
   },
   {
-    inputs: [{ name: 'marketId', type: 'uint256' }],
-    name: 'markets',
+    inputs: [{ name: "marketId", type: "uint256" }],
+    name: "markets",
     outputs: [
-      { name: 'dealer', type: 'address' },
-      { name: 'tokenId', type: 'uint256' },
-      { name: 'category', type: 'uint256' },
-      { name: 'subCategory', type: 'uint256' },
-      { name: 'deadline', type: 'uint256' },
-      { name: 'description', type: 'string' },
-      { name: 'createdAt', type: 'uint256' },
-      { name: 'dealerFeeBps', type: 'uint256' },
-      { name: 'status', type: 'uint8' },
-      { name: 'positiveOutcome', type: 'bool' },
-      { name: 'oracleId', type: 'bytes32' },
-      { name: 'conditionData', type: 'bytes32' },
+      { name: "dealer", type: "address" },
+      { name: "tokenId", type: "uint256" },
+      { name: "category", type: "uint256" },
+      { name: "subCategory", type: "uint256" },
+      { name: "deadline", type: "uint256" },
+      { name: "description", type: "string" },
+      { name: "createdAt", type: "uint256" },
+      { name: "dealerFeeBps", type: "uint256" },
+      { name: "status", type: "uint8" },
+      { name: "positiveOutcome", type: "bool" },
+      { name: "oracleId", type: "bytes32" },
+      { name: "conditionData", type: "bytes32" },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
-      { name: 'marketId', type: 'uint256' },
-      { name: 'account', type: 'address' },
+      { name: "marketId", type: "uint256" },
+      { name: "account", type: "address" },
     ],
-    name: 'predictions',
+    name: "predictions",
     outputs: [
-      { name: 'amount', type: 'uint256' },
-      { name: 'percentage', type: 'uint256' },
-      { name: 'placedAt', type: 'uint256' },
-      { name: 'claimed', type: 'bool' },
+      { name: "amount", type: "uint256" },
+      { name: "percentage", type: "uint256" },
+      { name: "placedAt", type: "uint256" },
+      { name: "claimed", type: "bool" },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
 ] as const;
 
@@ -318,7 +325,7 @@ export class EVMPredictionClient {
   private ensureAccount(wallet: WalletContext): Address {
     const account = wallet.walletClient.account?.address;
     if (!account) {
-      throw new Error('Wallet client is not configured with an account');
+      throw new Error("Wallet client is not configured with an account");
     }
     return getAddress(account);
   }
@@ -328,7 +335,7 @@ export class EVMPredictionClient {
       return wallet.publicClient;
     }
     throw new Error(
-      'A viem PublicClient is required for this operation. Provide wallet.publicClient.'
+      "A viem PublicClient is required for this operation. Provide wallet.publicClient.",
     );
   }
 
@@ -343,7 +350,7 @@ export class EVMPredictionClient {
     const address = (await publicClient.readContract({
       address: this.predictionMarketAddress(),
       abi: this.abi,
-      functionName: 'stakeToken',
+      functionName: "stakeToken",
     })) as Address;
     this.stakeTokenCache = getAddress(address);
     return this.stakeTokenCache;
@@ -353,7 +360,10 @@ export class EVMPredictionClient {
    * Ensure the PredictionMarket contract has sufficient ERC-20 allowance.
    * Automatically approves if current allowance is insufficient.
    */
-  private async ensureAllowance(wallet: WalletContext, amount: bigint): Promise<void> {
+  private async ensureAllowance(
+    wallet: WalletContext,
+    amount: bigint,
+  ): Promise<void> {
     if (amount === 0n) {
       return;
     }
@@ -364,7 +374,7 @@ export class EVMPredictionClient {
     const currentAllowance = (await publicClient.readContract({
       address: token,
       abi: erc20Abi,
-      functionName: 'allowance',
+      functionName: "allowance",
       args: [owner, spender],
     })) as bigint;
     if (currentAllowance >= amount) {
@@ -373,7 +383,7 @@ export class EVMPredictionClient {
     const approveHash = await wallet.walletClient.writeContract({
       address: token,
       abi: erc20Abi,
-      functionName: 'approve',
+      functionName: "approve",
       args: [spender, amount],
       chain: wallet.chain,
       account: wallet.walletClient.account!,
@@ -392,7 +402,7 @@ export class EVMPredictionClient {
   private async execute(
     wallet: WalletContext,
     functionName: string,
-    args: readonly unknown[]
+    args: readonly unknown[],
   ): Promise<TransactionResult> {
     const contractParams = {
       address: this.predictionMarketAddress(),
@@ -430,16 +440,16 @@ export class EVMPredictionClient {
    */
   async createMarket(
     wallet: WalletContext,
-    params: CreateMarketParams
+    params: CreateMarketParams,
   ): Promise<TransactionResult> {
     const ZERO_BYTES32 =
-      '0x0000000000000000000000000000000000000000000000000000000000000000' as `0x${string}`;
+      "0x0000000000000000000000000000000000000000000000000000000000000000" as `0x${string}`;
     const oracle = params.oracleId ?? ZERO_BYTES32;
     const condition = params.conditionData ?? ZERO_BYTES32;
 
     // Use createMarketWithCondition when conditionData is non-zero
     if (condition !== ZERO_BYTES32) {
-      return this.execute(wallet, 'createMarketWithCondition', [
+      return this.execute(wallet, "createMarketWithCondition", [
         params.tokenId,
         params.category,
         params.subCategory,
@@ -450,7 +460,7 @@ export class EVMPredictionClient {
       ]);
     }
 
-    return this.execute(wallet, 'createMarket', [
+    return this.execute(wallet, "createMarket", [
       params.tokenId,
       params.category,
       params.subCategory,
@@ -473,10 +483,14 @@ export class EVMPredictionClient {
     wallet: WalletContext,
     marketId: bigint,
     percentage: number,
-    amount: bigint
+    amount: bigint,
   ): Promise<TransactionResult> {
     await this.ensureAllowance(wallet, amount);
-    return this.execute(wallet, 'placePrediction', [marketId, BigInt(percentage), amount]);
+    return this.execute(wallet, "placePrediction", [
+      marketId,
+      BigInt(percentage),
+      amount,
+    ]);
   }
 
   /**
@@ -492,12 +506,12 @@ export class EVMPredictionClient {
     wallet: WalletContext,
     marketId: bigint,
     newPercentage: number,
-    additionalAmount: bigint
+    additionalAmount: bigint,
   ): Promise<TransactionResult> {
     if (additionalAmount > 0n) {
       await this.ensureAllowance(wallet, additionalAmount);
     }
-    return this.execute(wallet, 'updatePrediction', [
+    return this.execute(wallet, "updatePrediction", [
       marketId,
       BigInt(newPercentage),
       additionalAmount,
@@ -511,8 +525,11 @@ export class EVMPredictionClient {
    * @param marketId - The market to withdraw from
    * @returns Transaction result
    */
-  async withdrawPrediction(wallet: WalletContext, marketId: bigint): Promise<TransactionResult> {
-    return this.execute(wallet, 'withdrawPrediction', [marketId]);
+  async withdrawPrediction(
+    wallet: WalletContext,
+    marketId: bigint,
+  ): Promise<TransactionResult> {
+    return this.execute(wallet, "withdrawPrediction", [marketId]);
   }
 
   /**
@@ -522,8 +539,11 @@ export class EVMPredictionClient {
    * @param marketId - The market to cancel
    * @returns Transaction result
    */
-  async cancelMarket(wallet: WalletContext, marketId: bigint): Promise<TransactionResult> {
-    return this.execute(wallet, 'cancelMarket', [marketId]);
+  async cancelMarket(
+    wallet: WalletContext,
+    marketId: bigint,
+  ): Promise<TransactionResult> {
+    return this.execute(wallet, "cancelMarket", [marketId]);
   }
 
   /**
@@ -533,8 +553,11 @@ export class EVMPredictionClient {
    * @param marketId - The market to abandon
    * @returns Transaction result
    */
-  async abandonMarket(wallet: WalletContext, marketId: bigint): Promise<TransactionResult> {
-    return this.execute(wallet, 'abandonMarket', [marketId]);
+  async abandonMarket(
+    wallet: WalletContext,
+    marketId: bigint,
+  ): Promise<TransactionResult> {
+    return this.execute(wallet, "abandonMarket", [marketId]);
   }
 
   /**
@@ -548,9 +571,9 @@ export class EVMPredictionClient {
   async resolveMarket(
     wallet: WalletContext,
     marketId: bigint,
-    positiveOutcome: boolean
+    positiveOutcome: boolean,
   ): Promise<TransactionResult> {
-    return this.execute(wallet, 'resolveMarket', [marketId, positiveOutcome]);
+    return this.execute(wallet, "resolveMarket", [marketId, positiveOutcome]);
   }
 
   /**
@@ -562,9 +585,9 @@ export class EVMPredictionClient {
    */
   async resolveMarketWithOracle(
     wallet: WalletContext,
-    marketId: bigint
+    marketId: bigint,
   ): Promise<TransactionResult> {
-    return this.execute(wallet, 'resolveMarketWithOracle', [marketId]);
+    return this.execute(wallet, "resolveMarketWithOracle", [marketId]);
   }
 
   /**
@@ -577,9 +600,9 @@ export class EVMPredictionClient {
    */
   async requestOracleResolution(
     wallet: WalletContext,
-    marketId: bigint
+    marketId: bigint,
   ): Promise<TransactionResult> {
-    return this.execute(wallet, 'requestOracleResolution', [marketId]);
+    return this.execute(wallet, "requestOracleResolution", [marketId]);
   }
 
   /**
@@ -592,9 +615,9 @@ export class EVMPredictionClient {
    */
   async completeOracleResolution(
     wallet: WalletContext,
-    marketId: bigint
+    marketId: bigint,
   ): Promise<TransactionResult> {
-    return this.execute(wallet, 'completeOracleResolution', [marketId]);
+    return this.execute(wallet, "completeOracleResolution", [marketId]);
   }
 
   /**
@@ -604,8 +627,11 @@ export class EVMPredictionClient {
    * @param marketId - The market to claim winnings from
    * @returns Transaction result
    */
-  async claimWinnings(wallet: WalletContext, marketId: bigint): Promise<TransactionResult> {
-    return this.execute(wallet, 'claimWinnings', [marketId]);
+  async claimWinnings(
+    wallet: WalletContext,
+    marketId: bigint,
+  ): Promise<TransactionResult> {
+    return this.execute(wallet, "claimWinnings", [marketId]);
   }
 
   /**
@@ -615,8 +641,11 @@ export class EVMPredictionClient {
    * @param marketId - The market to claim a refund from
    * @returns Transaction result
    */
-  async claimRefund(wallet: WalletContext, marketId: bigint): Promise<TransactionResult> {
-    return this.execute(wallet, 'claimRefund', [marketId]);
+  async claimRefund(
+    wallet: WalletContext,
+    marketId: bigint,
+  ): Promise<TransactionResult> {
+    return this.execute(wallet, "claimRefund", [marketId]);
   }
 
   /**
@@ -627,8 +656,11 @@ export class EVMPredictionClient {
    * @param marketId - The market to lock
    * @returns Transaction result
    */
-  async lockMarket(wallet: WalletContext, marketId: bigint): Promise<TransactionResult> {
-    return this.execute(wallet, 'lockMarket', [marketId]);
+  async lockMarket(
+    wallet: WalletContext,
+    marketId: bigint,
+  ): Promise<TransactionResult> {
+    return this.execute(wallet, "lockMarket", [marketId]);
   }
 
   /**
@@ -640,12 +672,12 @@ export class EVMPredictionClient {
    */
   async calculateMarketSplit(
     publicClient: PublicClient,
-    marketId: bigint
+    marketId: bigint,
   ): Promise<[bigint, bigint, bigint, bigint, boolean]> {
     return publicClient.readContract({
       address: this.predictionMarketAddress(),
       abi: predictionMarketAbi,
-      functionName: 'calculateMarketSplit',
+      functionName: "calculateMarketSplit",
       args: [marketId],
     }) as Promise<[bigint, bigint, bigint, bigint, boolean]>;
   }
@@ -657,8 +689,11 @@ export class EVMPredictionClient {
    * @param marketId - The market to claim lock refund from
    * @returns Transaction result
    */
-  async claimLockRefund(wallet: WalletContext, marketId: bigint): Promise<TransactionResult> {
-    return this.execute(wallet, 'claimLockRefund', [marketId]);
+  async claimLockRefund(
+    wallet: WalletContext,
+    marketId: bigint,
+  ): Promise<TransactionResult> {
+    return this.execute(wallet, "claimLockRefund", [marketId]);
   }
 
   /**
@@ -672,12 +707,12 @@ export class EVMPredictionClient {
   async getLockRefundAmount(
     publicClient: PublicClient,
     marketId: bigint,
-    predictor: Address
+    predictor: Address,
   ): Promise<bigint> {
     const result = await publicClient.readContract({
       address: this.predictionMarketAddress(),
       abi: this.abi,
-      functionName: 'getLockRefundAmount',
+      functionName: "getLockRefundAmount",
       args: [marketId, predictor],
     });
     return BigInt(result as bigint);
@@ -692,7 +727,7 @@ export class EVMPredictionClient {
    */
   async getLockRefundsSplit(
     publicClient: PublicClient,
-    marketId: bigint
+    marketId: bigint,
   ): Promise<{
     negativePercentage: bigint;
     positivePercentage: bigint;
@@ -702,7 +737,7 @@ export class EVMPredictionClient {
     const result = (await publicClient.readContract({
       address: this.predictionMarketAddress(),
       abi: this.abi,
-      functionName: 'lockRefunds',
+      functionName: "lockRefunds",
       args: [marketId],
     })) as [bigint, bigint, bigint, bigint];
     return {
@@ -720,8 +755,11 @@ export class EVMPredictionClient {
    * @param marketId - The market to withdraw fees from
    * @returns Transaction result
    */
-  async withdrawDealerFees(wallet: WalletContext, marketId: bigint): Promise<TransactionResult> {
-    return this.execute(wallet, 'withdrawDealerFees', [marketId]);
+  async withdrawDealerFees(
+    wallet: WalletContext,
+    marketId: bigint,
+  ): Promise<TransactionResult> {
+    return this.execute(wallet, "withdrawDealerFees", [marketId]);
   }
 
   /**
@@ -731,7 +769,7 @@ export class EVMPredictionClient {
    * @returns Transaction result
    */
   async withdrawSystemFees(wallet: WalletContext): Promise<TransactionResult> {
-    return this.execute(wallet, 'withdrawSystemFees', []);
+    return this.execute(wallet, "withdrawSystemFees", []);
   }
 
   /**
@@ -743,12 +781,12 @@ export class EVMPredictionClient {
    */
   async getMarket(
     publicClient: PublicClient,
-    marketId: bigint
+    marketId: bigint,
   ): Promise<ReturnType<typeof formatMarket>> {
     const raw = await publicClient.readContract({
       address: this.predictionMarketAddress(),
       abi: this.abi,
-      functionName: 'markets',
+      functionName: "markets",
       args: [marketId],
     });
     return formatMarket(raw as readonly unknown[]);
@@ -769,15 +807,19 @@ export class EVMPredictionClient {
     return (await publicClient.readContract({
       address: this.predictionMarketAddress(),
       abi: this.abi,
-      functionName: 'testMode',
+      functionName: "testMode",
     })) as boolean;
   }
 
-  async getPrediction(publicClient: PublicClient, marketId: bigint, account: Address) {
+  async getPrediction(
+    publicClient: PublicClient,
+    marketId: bigint,
+    account: Address,
+  ) {
     const raw = (await publicClient.readContract({
       address: this.predictionMarketAddress(),
       abi: this.abi,
-      functionName: 'predictions',
+      functionName: "predictions",
       args: [marketId, account],
     })) as readonly [bigint, bigint, bigint, boolean];
     return {

@@ -4,7 +4,7 @@
  * for display in the Heavymath prediction market UI.
  */
 
-import { getNow } from './datetime';
+import { getNow } from "./datetime";
 
 /** USDC has 6 decimals */
 const USDC_DECIMALS = 6;
@@ -26,11 +26,12 @@ export function formatUSDC(amount: bigint, decimals: number = 2): string {
   const fractionalPart = amount % divisor;
 
   // Convert to number for formatting (safe for display amounts)
-  const value = Number(wholePart) + Number(fractionalPart) / 10 ** USDC_DECIMALS;
+  const value =
+    Number(wholePart) + Number(fractionalPart) / 10 ** USDC_DECIMALS;
 
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(value);
@@ -92,7 +93,7 @@ export function formatTimeRemaining(deadline: Date): string {
   const diff = deadline.getTime() - now.getTime();
 
   if (diff <= 0) {
-    return 'Ended';
+    return "Ended";
   }
 
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -121,22 +122,22 @@ export function formatTimeRemaining(deadline: Date): string {
 export function formatDate(date: Date | bigint | number | string): string {
   let d: Date;
 
-  if (typeof date === 'bigint') {
+  if (typeof date === "bigint") {
     d = new Date(Number(date) * 1000);
-  } else if (typeof date === 'number') {
+  } else if (typeof date === "number") {
     d = new Date(date * 1000);
-  } else if (typeof date === 'string') {
+  } else if (typeof date === "string") {
     d = new Date(date);
   } else {
     d = date;
   }
 
   return d.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 

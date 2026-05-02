@@ -9,4 +9,4 @@ export {
   MdSportsMma as MmaIcon,
   MdSportsHandball as HandballIcon,
   MdSportsVolleyball as VolleyballIcon,
-} from 'react-icons/md';
+} from "react-icons/md";

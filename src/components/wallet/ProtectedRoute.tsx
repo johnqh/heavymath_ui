@@ -1,13 +1,16 @@
-import { Navigate, useParams } from 'react-router-dom';
-import { useAuth } from '../../context/WalletAuthContext';
-import type { ReactNode } from 'react';
+import { Navigate, useParams } from "react-router-dom";
+import { useAuth } from "../../context/WalletAuthContext";
+import type { ReactNode } from "react";
 
 interface ProtectedRouteProps {
   children: ReactNode;
   requireDealer?: boolean;
 }
 
-export function ProtectedRoute({ children, requireDealer = false }: ProtectedRouteProps) {
+export function ProtectedRoute({
+  children,
+  requireDealer = false,
+}: ProtectedRouteProps) {
   const { lang } = useParams<{ lang: string }>();
   const { isConnected, isDealer } = useAuth();
 

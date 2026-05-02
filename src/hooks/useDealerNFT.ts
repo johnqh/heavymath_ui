@@ -1,33 +1,33 @@
-import { useCallback } from 'react';
-import { useConfig } from 'wagmi';
-import { getPublicClient, getWalletClient, switchChain } from 'wagmi/actions';
-import { getAppConfig } from '../config/app';
-import { useMutation } from '@tanstack/react-query';
-import { erc20Abi } from 'viem';
-import { useToastActions } from './useToastActions';
-import { getContractAddress } from '../config/contracts';
+import { useCallback } from "react";
+import { useConfig } from "wagmi";
+import { getPublicClient, getWalletClient, switchChain } from "wagmi/actions";
+import { getAppConfig } from "../config/app";
+import { useMutation } from "@tanstack/react-query";
+import { erc20Abi } from "viem";
+import { useToastActions } from "./useToastActions";
+import { getContractAddress } from "../config/contracts";
 
 const DEALER_NFT_ABI = [
   {
-    name: 'mint',
-    type: 'function',
-    stateMutability: 'nonpayable',
+    name: "mint",
+    type: "function",
+    stateMutability: "nonpayable",
     inputs: [],
     outputs: [],
   },
   {
-    name: 'mintPrice',
-    type: 'function',
-    stateMutability: 'view',
+    name: "mintPrice",
+    type: "function",
+    stateMutability: "view",
     inputs: [],
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [{ name: "", type: "uint256" }],
   },
   {
-    name: 'stakeToken',
-    type: 'function',
-    stateMutability: 'view',
+    name: "stakeToken",
+    type: "function",
+    stateMutability: "view",
     inputs: [],
-    outputs: [{ name: '', type: 'address' }],
+    outputs: [{ name: "", type: "address" }],
   },
 ] as const;
 
@@ -48,12 +48,15 @@ export function useMintDealerNFT() {
       const publicClient = getPublicClient(config, { chainId });
 
       if (!currentWalletClient || !publicClient) {
-        throw new Error('Wallet not connected');
+        throw new Error("Wallet not connected");
       }
 
-      const dealerNFTAddress = getContractAddress(chainId, 'dealerNFT');
-      if (!dealerNFTAddress || dealerNFTAddress === '0x0000000000000000000000000000000000000000') {
-        throw new Error('DealerNFT contract not deployed on this chain');
+      const dealerNFTAddress = getContractAddress(chainId, "dealerNFT");
+      if (
+        !dealerNFTAddress ||
+        dealerNFTAddress === "0x0000000000000000000000000000000000000000"
+      ) {
+        throw new Error("DealerNFT contract not deployed on this chain");
       }
 
       // Read mint price and stake token address from contract
@@ -61,22 +64,25 @@ export function useMintDealerNFT() {
         publicClient.readContract({
           address: dealerNFTAddress,
           abi: DEALER_NFT_ABI,
-          functionName: 'mintPrice',
+          functionName: "mintPrice",
         }),
         publicClient.readContract({
           address: dealerNFTAddress,
           abi: DEALER_NFT_ABI,
-          functionName: 'stakeToken',
+          functionName: "stakeToken",
         }),
       ]);
 
       // Approve USDC if mint price > 0
-      if (mintPrice > 0n && stakeTokenAddress !== '0x0000000000000000000000000000000000000000') {
+      if (
+        mintPrice > 0n &&
+        stakeTokenAddress !== "0x0000000000000000000000000000000000000000"
+      ) {
         const account = currentWalletClient.account.address;
         const allowance = await publicClient.readContract({
           address: stakeTokenAddress,
           abi: erc20Abi,
-          functionName: 'allowance',
+          functionName: "allowance",
           args: [account, dealerNFTAddress],
         });
 
@@ -84,7 +90,7 @@ export function useMintDealerNFT() {
           const approveHash = await currentWalletClient.writeContract({
             address: stakeTokenAddress,
             abi: erc20Abi,
-            functionName: 'approve',
+            functionName: "approve",
             args: [dealerNFTAddress, mintPrice],
             chain: publicClient.chain,
           });
@@ -96,7 +102,7 @@ export function useMintDealerNFT() {
       const hash = await currentWalletClient.writeContract({
         address: dealerNFTAddress,
         abi: DEALER_NFT_ABI,
-        functionName: 'mint',
+        functionName: "mint",
         args: [],
         chain: publicClient.chain,
       });
@@ -115,17 +121,18 @@ export function useMintDealerNFTWithToast() {
   const toast = useToastActions();
 
   const mutateAsync = useCallback(async () => {
-    toast.txPending('Minting your Dealer NFT...');
+    toast.txPending("Minting your Dealer NFT...");
 
     try {
       const result = await mutation.mutateAsync();
       toast.success(
-        'Dealer NFT Minted',
-        'You are now a dealer! Start creating prediction markets.'
+        "Dealer NFT Minted",
+        "You are now a dealer! Start creating prediction markets.",
       );
       return result;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to mint Dealer NFT';
+      const message =
+        error instanceof Error ? error.message : "Failed to mint Dealer NFT";
       toast.txError(message);
       throw error;
     }

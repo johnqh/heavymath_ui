@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
-import { MarketCard } from './MarketCard';
-import type { Market } from '@heavymath/indexer_client';
+import { useTranslation } from "react-i18next";
+import { MarketCard } from "./MarketCard";
+import type { Market } from "@heavymath/indexer_client";
 
 interface MarketListProps {
   markets: Market[];
@@ -8,8 +8,12 @@ interface MarketListProps {
   showCategory?: boolean;
 }
 
-export function MarketList({ markets, isLoading = false, showCategory = true }: MarketListProps) {
-  const { t } = useTranslation('markets');
+export function MarketList({
+  markets,
+  isLoading = false,
+  showCategory = true,
+}: MarketListProps) {
+  const { t } = useTranslation("markets");
 
   if (isLoading) {
     return (
@@ -27,16 +31,20 @@ export function MarketList({ markets, isLoading = false, showCategory = true }: 
         <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
           <span className="text-2xl">📊</span>
         </div>
-        <h3 className="text-lg font-semibold mb-2">{t('empty.title')}</h3>
-        <p className="text-muted-foreground">{t('empty.description')}</p>
+        <h3 className="text-lg font-semibold mb-2">{t("empty.title")}</h3>
+        <p className="text-muted-foreground">{t("empty.description")}</p>
       </div>
     );
   }
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {markets.map(market => (
-        <MarketCard key={market.id} market={market} showCategory={showCategory} />
+      {markets.map((market) => (
+        <MarketCard
+          key={market.id}
+          market={market}
+          showCategory={showCategory}
+        />
       ))}
     </div>
   );

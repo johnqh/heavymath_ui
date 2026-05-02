@@ -5,11 +5,11 @@
  * the indexer supports oracleId filtering in MarketFilters.
  */
 
-import { useQuery } from '@tanstack/react-query';
-import type { IndexerClient } from '@heavymath/indexer_client';
-import { encodeOracleId, isValidSportsOracleId } from '../utils/oracleId';
-import { CATEGORIES } from '../types/market';
-import type { SportCode } from '../config/sportCodes';
+import { useQuery } from "@tanstack/react-query";
+import type { IndexerClient } from "@heavymath/indexer_client";
+import { encodeOracleId, isValidSportsOracleId } from "../utils/oracleId";
+import { CATEGORIES } from "../types/market";
+import type { SportCode } from "../config/sportCodes";
 
 /**
  * Fetch markets for a specific game, identified by sport code and game ID.
@@ -26,12 +26,13 @@ export function useGameMarkets(
   indexerClient: IndexerClient,
   sportCode: SportCode,
   gameId: number | undefined,
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean },
 ) {
-  const targetOracleId = gameId !== undefined ? encodeOracleId(sportCode, gameId) : undefined;
+  const targetOracleId =
+    gameId !== undefined ? encodeOracleId(sportCode, gameId) : undefined;
 
   return useQuery({
-    queryKey: ['gameMarkets', sportCode, gameId],
+    queryKey: ["gameMarkets", sportCode, gameId],
     queryFn: async () => {
       const response = await indexerClient.getMarkets({
         category: CATEGORIES.SPORTS,
@@ -42,7 +43,7 @@ export function useGameMarkets(
 
       if (!targetOracleId) return [];
 
-      return markets.filter(market => {
+      return markets.filter((market) => {
         if (!market.oracleId) return false;
         try {
           const normalized = market.oracleId.toLowerCase();

@@ -5,11 +5,11 @@
  * Used by the bettor mode to filter sports hierarchy pages.
  */
 
-import { useQuery } from '@tanstack/react-query';
-import type { IndexerClient } from '@heavymath/indexer_client';
-import { decodeOracleId, isValidSportsOracleId } from '../utils/oracleId';
-import { CATEGORIES } from '../types/market';
-import type { SportCode } from '../config/sportCodes';
+import { useQuery } from "@tanstack/react-query";
+import type { IndexerClient } from "@heavymath/indexer_client";
+import { decodeOracleId, isValidSportsOracleId } from "../utils/oracleId";
+import { CATEGORIES } from "../types/market";
+import type { SportCode } from "../config/sportCodes";
 
 /**
  * Fetch game IDs that have associated prediction markets for a given sport.
@@ -18,9 +18,12 @@ import type { SportCode } from '../config/sportCodes';
  * @param sportCode - Numeric sport code to filter by
  * @returns Set of game IDs with markets, plus loading state
  */
-export function useGameIdsWithMarkets(indexerClient: IndexerClient, sportCode: SportCode) {
+export function useGameIdsWithMarkets(
+  indexerClient: IndexerClient,
+  sportCode: SportCode,
+) {
   const { data, isLoading } = useQuery({
-    queryKey: ['gameIdsWithMarkets', sportCode],
+    queryKey: ["gameIdsWithMarkets", sportCode],
     queryFn: async () => {
       const response = await indexerClient.getMarkets({
         category: CATEGORIES.SPORTS,

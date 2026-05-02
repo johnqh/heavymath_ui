@@ -4,8 +4,8 @@
  * Format: [1 byte sport code][31 bytes game ID (uint248)]
  */
 
-import { pad, toHex, hexToBigInt, type Hex } from 'viem';
-import { isSportCode, type SportCode } from '../config/sportCodes';
+import { pad, toHex, hexToBigInt, type Hex } from "viem";
+import { isSportCode, type SportCode } from "../config/sportCodes";
 
 /**
  * Encode a sport code and game ID into a bytes32 oracleId.
@@ -37,7 +37,10 @@ export function encodeOracleId(sportCode: SportCode, gameId: number): Hex {
  * @param oracleId - bytes32 hex string
  * @returns Decoded sport code and game ID
  */
-export function decodeOracleId(oracleId: Hex): { sportCode: SportCode; gameId: number } {
+export function decodeOracleId(oracleId: Hex): {
+  sportCode: SportCode;
+  gameId: number;
+} {
   const value = hexToBigInt(oracleId);
 
   // Extract sport code from leftmost byte

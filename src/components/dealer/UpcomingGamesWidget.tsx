@@ -1,10 +1,10 @@
-import { Link, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
-import type { IndexerClient } from '@heavymath/indexer_client';
-import { isValidSportsOracleId, decodeOracleId } from '../../utils/oracleId';
-import { SPORT_CODES, type SportCode } from '../../config/sportCodes';
-import { CATEGORIES } from '../../types/market';
+import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import type { IndexerClient } from "@heavymath/indexer_client";
+import { isValidSportsOracleId, decodeOracleId } from "../../utils/oracleId";
+import { SPORT_CODES, type SportCode } from "../../config/sportCodes";
+import { CATEGORIES } from "../../types/market";
 import {
   SoccerBallIcon,
   BasketballIcon,
@@ -16,9 +16,12 @@ import {
   MmaIcon,
   HandballIcon,
   VolleyballIcon,
-} from '../../components/icons';
+} from "../../components/icons";
 
-const SPORT_ICONS: Record<SportCode, React.ComponentType<{ className?: string }>> = {
+const SPORT_ICONS: Record<
+  SportCode,
+  React.ComponentType<{ className?: string }>
+> = {
   1: SoccerBallIcon,
   2: BasketballIcon,
   3: FootballIcon,
@@ -42,9 +45,12 @@ interface UpcomingGamesWidgetProps {
   dealerAddress: string;
 }
 
-function useMarketCountsBySport(indexerClient: IndexerClient, dealerAddress: string) {
+function useMarketCountsBySport(
+  indexerClient: IndexerClient,
+  dealerAddress: string,
+) {
   return useQuery({
-    queryKey: ['dealerMarketCountsBySport', dealerAddress],
+    queryKey: ["dealerMarketCountsBySport", dealerAddress],
     queryFn: async () => {
       const response = await indexerClient.getMarkets({
         dealer: dealerAddress,
@@ -81,29 +87,37 @@ function useMarketCountsBySport(indexerClient: IndexerClient, dealerAddress: str
   });
 }
 
-export function UpcomingGamesWidget({ indexerClient, dealerAddress }: UpcomingGamesWidgetProps) {
+export function UpcomingGamesWidget({
+  indexerClient,
+  dealerAddress,
+}: UpcomingGamesWidgetProps) {
   const { lang } = useParams<{ lang: string }>();
-  const { t } = useTranslation('common');
-  const { data: sportCounts, isLoading } = useMarketCountsBySport(indexerClient, dealerAddress);
+  const { t } = useTranslation("common");
+  const { data: sportCounts, isLoading } = useMarketCountsBySport(
+    indexerClient,
+    dealerAddress,
+  );
 
   return (
     <div className="p-6 rounded-lg border border-border bg-card">
-      <h3 className="font-semibold mb-4">{t('dealer.marketsBySport', 'Markets by Sport')}</h3>
+      <h3 className="font-semibold mb-4">
+        {t("dealer.marketsBySport", "Markets by Sport")}
+      </h3>
 
       {isLoading ? (
         <div className="space-y-2">
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3].map((i) => (
             <div key={i} className="animate-pulse h-8 bg-muted rounded" />
           ))}
         </div>
       ) : !sportCounts || sportCounts.length === 0 ? (
         <div className="text-sm text-muted-foreground text-center py-4">
-          <p>{t('dealer.noSportsMarkets', 'No sports markets yet')}</p>
+          <p>{t("dealer.noSportsMarkets", "No sports markets yet")}</p>
           <Link
-            to={`/${lang || 'en'}/sports`}
+            to={`/${lang || "en"}/sports`}
             className="text-primary hover:underline mt-2 inline-block"
           >
-            {t('dealer.browseSports', 'Browse sports to create markets')}
+            {t("dealer.browseSports", "Browse sports to create markets")}
           </Link>
         </div>
       ) : (
@@ -113,15 +127,17 @@ export function UpcomingGamesWidget({ indexerClient, dealerAddress }: UpcomingGa
             return (
               <Link
                 key={sportCode}
-                to={`/${lang || 'en'}/sports/${slug}`}
+                to={`/${lang || "en"}/sports/${slug}`}
                 className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <Icon className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-medium">{t(`nav.${slug}`, slug)}</span>
+                  <span className="text-sm font-medium">
+                    {t(`nav.${slug}`, slug)}
+                  </span>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {count} {count === 1 ? 'market' : 'markets'}
+                  {count} {count === 1 ? "market" : "markets"}
                 </span>
               </Link>
             );

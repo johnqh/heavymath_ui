@@ -25,7 +25,7 @@ export type SportCode = (typeof SPORT_CODES)[keyof typeof SPORT_CODES];
 export type SportSlug = keyof typeof SPORT_CODES;
 
 const slugByCode = Object.fromEntries(
-  Object.entries(SPORT_CODES).map(([slug, code]) => [code, slug])
+  Object.entries(SPORT_CODES).map(([slug, code]) => [code, slug]),
 ) as Record<SportCode, SportSlug>;
 
 /**
@@ -64,14 +64,14 @@ export function isSportCode(value: number): value is SportCode {
  */
 export function getSportEventPath(slug: SportSlug): string {
   switch (slug) {
-    case 'soccer':
-      return 'matches';
-    case 'f1':
-      return 'races';
-    case 'mma':
-      return 'fights';
+    case "soccer":
+      return "matches";
+    case "f1":
+      return "races";
+    case "mma":
+      return "fights";
     default:
-      return 'games';
+      return "games";
   }
 }
 
@@ -83,7 +83,11 @@ export function getSportEventPath(slug: SportSlug): string {
  * @param gameId - Game/fixture/race/fight ID
  * @returns URL path like /en/sports/soccer/matches/123, or null if invalid sport
  */
-export function getSportEventUrl(lang: string, sportCode: number, gameId: number): string | null {
+export function getSportEventUrl(
+  lang: string,
+  sportCode: number,
+  gameId: number,
+): string | null {
   const slug = getSportSlug(sportCode);
   if (!slug) return null;
   const segment = getSportEventPath(slug);

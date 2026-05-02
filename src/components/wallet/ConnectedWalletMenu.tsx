@@ -1,6 +1,6 @@
-import { type FC, useMemo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { type FC, useMemo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   ClipboardDocumentIcon,
   ArrowRightOnRectangleIcon,
@@ -9,10 +9,13 @@ import {
   BriefcaseIcon,
   TicketIcon,
   Cog6ToothIcon,
-} from '@heroicons/react/24/outline';
-import { AuthStatus as SudobilityAuthStatus, ChainType } from '@sudobility/types';
-import { WalletDropdownMenu } from '@sudobility/web3-components';
-import { AuthStatus } from '../../types/auth';
+} from "@heroicons/react/24/outline";
+import {
+  AuthStatus as SudobilityAuthStatus,
+  ChainType,
+} from "@sudobility/types";
+import { WalletDropdownMenu } from "@sudobility/web3-components";
+import { AuthStatus } from "../../types/auth";
 
 interface ConnectedWalletMenuProps {
   walletAddress: string;
@@ -31,7 +34,7 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
   authStatus,
   onDisconnect,
 }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   const navigate = useNavigate();
   const { lang } = useParams<{ lang: string }>();
 
@@ -40,7 +43,7 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
       try {
         await navigator.clipboard.writeText(walletAddress);
       } catch (error) {
-        console.error('Failed to copy address:', error);
+        console.error("Failed to copy address:", error);
       }
     }
   }, [walletAddress]);
@@ -73,56 +76,56 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
   const menuItems = useMemo(
     () => [
       {
-        id: 'copy-address',
-        label: t('wallet.copyAddress', 'Copy Address'),
+        id: "copy-address",
+        label: t("wallet.copyAddress", "Copy Address"),
         icon: ClipboardDocumentIcon,
         onClick: handleCopyAddress,
       },
       {
-        id: 'separator-1',
-        label: '',
+        id: "separator-1",
+        label: "",
         onClick: () => {},
         separator: true,
       },
       {
-        id: 'profile',
-        label: t('wallet.profile', 'Profile'),
+        id: "profile",
+        label: t("wallet.profile", "Profile"),
         icon: UserIcon,
         onClick: handleProfile,
       },
       {
-        id: 'favorites',
-        label: t('wallet.favorites', 'Favorites'),
+        id: "favorites",
+        label: t("wallet.favorites", "Favorites"),
         icon: StarIcon,
         onClick: handleFavorites,
       },
       {
-        id: 'dealer',
-        label: t('wallet.dealer', 'Dealer'),
+        id: "dealer",
+        label: t("wallet.dealer", "Dealer"),
         icon: BriefcaseIcon,
         onClick: handleDealer,
       },
       {
-        id: 'portfolio',
-        label: t('wallet.portfolio', 'Portfolio'),
+        id: "portfolio",
+        label: t("wallet.portfolio", "Portfolio"),
         icon: TicketIcon,
         onClick: handlePortfolio,
       },
       {
-        id: 'settings',
-        label: t('wallet.settings', 'Settings'),
+        id: "settings",
+        label: t("wallet.settings", "Settings"),
         icon: Cog6ToothIcon,
         onClick: handleSettings,
       },
       {
-        id: 'separator-2',
-        label: '',
+        id: "separator-2",
+        label: "",
         onClick: () => {},
         separator: true,
       },
       {
-        id: 'disconnect',
-        label: t('buttons.disconnect', 'Disconnect'),
+        id: "disconnect",
+        label: t("buttons.disconnect", "Disconnect"),
         icon: ArrowRightOnRectangleIcon,
         onClick: handleDisconnect,
       },
@@ -136,7 +139,7 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
       handlePortfolio,
       handleSettings,
       handleDisconnect,
-    ]
+    ],
   );
 
   // Map our AuthStatus to @sudobility/types AuthStatus
@@ -158,9 +161,9 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
       chainType={ChainType.EVM}
       menuItems={menuItems}
       statusLabels={{
-        verified: t('wallet.statusVerified', 'Verified'),
-        connected: t('wallet.statusConnected', 'Connected'),
-        disconnected: t('wallet.statusDisconnected', 'Disconnected'),
+        verified: t("wallet.statusVerified", "Verified"),
+        connected: t("wallet.statusConnected", "Connected"),
+        disconnected: t("wallet.statusDisconnected", "Disconnected"),
       }}
     />
   );

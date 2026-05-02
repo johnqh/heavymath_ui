@@ -12,7 +12,7 @@ export {
   encodeConditionData,
   decodeConditionData,
   formatConditionDescription,
-} from '@sudobility/heavymath_types';
+} from "@sudobility/heavymath_types";
 
 export type {
   ConditionData,
@@ -23,4 +23,4 @@ export type {
   WinLossCondition,
   MatchScoreCondition,
   TournamentCondition,
-} from '@sudobility/heavymath_types';
+} from "@sudobility/heavymath_types";

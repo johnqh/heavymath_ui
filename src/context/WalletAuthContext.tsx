@@ -1,4 +1,11 @@
-import { createContext, useContext, useMemo, useState, useCallback, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  useCallback,
+  type ReactNode,
+} from "react";
 import {
   useAccount,
   useConnect,
@@ -7,24 +14,24 @@ import {
   useSignMessage,
   useReadContract,
   useReadContracts,
-} from 'wagmi';
-import { AuthStatus } from '../types/auth';
-import type { Address } from 'viem';
-import { erc721Abi } from 'viem';
-import { getContractAddress } from '../config/contracts';
+} from "wagmi";
+import { AuthStatus } from "../types/auth";
+import type { Address } from "viem";
+import { erc721Abi } from "viem";
+import { getContractAddress } from "../config/contracts";
 
-const STORAGE_KEY = 'heavymath_verified';
+const STORAGE_KEY = "heavymath_verified";
 
 const tokenOfOwnerByIndexAbi = [
   {
     inputs: [
-      { name: 'owner', type: 'address' },
-      { name: 'index', type: 'uint256' },
+      { name: "owner", type: "address" },
+      { name: "index", type: "uint256" },
     ],
-    name: 'tokenOfOwnerByIndex',
-    outputs: [{ name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
+    name: "tokenOfOwnerByIndex",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
   },
 ] as const;
 
@@ -55,7 +62,13 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const { address, chainId, isConnected, isConnecting, status: wagmiStatus } = useAccount();
+  const {
+    address,
+    chainId,
+    isConnected,
+    isConnecting,
+    status: wagmiStatus,
+  } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const { switchChain: wagmiSwitchChain } = useSwitchChain();
@@ -78,7 +91,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (isConnecting) return AuthStatus.Connecting;
     if (isConnected && isVerified) return AuthStatus.Verified;
     if (isConnected) return AuthStatus.Connected;
-    if (wagmiStatus === 'reconnecting') return AuthStatus.Connecting;
+    if (wagmiStatus === "reconnecting") return AuthStatus.Connecting;
     return AuthStatus.Disconnected;
   }, [isConnected, isConnecting, isVerified, wagmiStatus]);
 
@@ -94,7 +107,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const handleDisconnect = useCallback(() => {
     disconnect();
     localStorage.removeItem(STORAGE_KEY);
-    setVerificationVersion(v => v + 1);
+    setVerificationVersion((v) => v + 1);
   }, [disconnect]);
 
   // Sign verification message
@@ -108,11 +121,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // Store verified address and trigger re-computation
       localStorage.setItem(STORAGE_KEY, address);
-      setVerificationVersion(v => v + 1);
+      setVerificationVersion((v) => v + 1);
 
       return true;
     } catch (error) {
-      console.error('Signing failed:', error);
+      console.error("Signing failed:", error);
       return false;
     }
   }, [address, signMessageAsync]);
@@ -123,11 +136,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   // Check dealer status on-chain via ERC721 balanceOf
-  const dealerNFTAddress = chainId ? getContractAddress(chainId, 'dealerNFT') : undefined;
+  const dealerNFTAddress = chainId
+    ? getContractAddress(chainId, "dealerNFT")
+    : undefined;
   const { data: nftBalance } = useReadContract({
     address: dealerNFTAddress,
     abi: erc721Abi,
-    functionName: 'balanceOf',
+    functionName: "balanceOf",
     args: address ? [address] : undefined,
     query: {
       enabled: !!address && !!dealerNFTAddress,
@@ -143,7 +158,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return Array.from({ length: balanceCount }, (_, i) => ({
       address: dealerNFTAddress,
       abi: tokenOfOwnerByIndexAbi,
-      functionName: 'tokenOfOwnerByIndex' as const,
+      functionName: "tokenOfOwnerByIndex" as const,
       args: [address, BigInt(i)] as const,
     }));
   }, [address, dealerNFTAddress, balanceCount]);
@@ -158,8 +173,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const dealerTokenIds: bigint[] = useMemo(() => {
     if (!tokenIdResults) return [];
     return tokenIdResults
-      .filter(r => r.status === 'success' && r.result !== undefined)
-      .map(r => r.result as bigint);
+      .filter((r) => r.status === "success" && r.result !== undefined)
+      .map((r) => r.result as bigint);
   }, [tokenIdResults]);
 
   const value: AuthContextType = {
@@ -180,11 +195,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

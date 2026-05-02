@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef } from "react";
 
 interface PredictionSliderProps {
   value: number;
@@ -29,7 +29,7 @@ export function PredictionSlider({
       const steppedValue = Math.round(pct / step) * step;
       return Math.max(min, Math.min(max, steppedValue));
     },
-    [min, max, step, value]
+    [min, max, step, value],
   );
 
   const handleSliderClick = useCallback(
@@ -37,7 +37,7 @@ export function PredictionSlider({
       if (disabled || !sliderRef.current) return;
       onChange(computeValue(e.clientX));
     },
-    [disabled, computeValue, onChange]
+    [disabled, computeValue, onChange],
   );
 
   const handlePointerDown = useCallback(
@@ -48,7 +48,7 @@ export function PredictionSlider({
       (e.target as HTMLElement).setPointerCapture(e.pointerId);
       onChange(computeValue(e.clientX));
     },
-    [disabled, computeValue, onChange]
+    [disabled, computeValue, onChange],
   );
 
   const handlePointerMove = useCallback(
@@ -56,7 +56,7 @@ export function PredictionSlider({
       if (!isDragging.current) return;
       onChange(computeValue(e.clientX));
     },
-    [computeValue, onChange]
+    [computeValue, onChange],
   );
 
   const handlePointerUp = useCallback(() => {
@@ -70,16 +70,16 @@ export function PredictionSlider({
         onChange(Math.max(min, Math.min(max, newValue)));
       }
     },
-    [min, max, onChange]
+    [min, max, onChange],
   );
 
   const percentage = ((value - min) / (max - min)) * 100;
 
   // Determine color based on value
   const getColor = () => {
-    if (value <= 30) return 'bg-danger-500';
-    if (value <= 70) return 'bg-warning-500';
-    return 'bg-success-500';
+    if (value <= 30) return "bg-danger-500";
+    if (value <= 70) return "bg-warning-500";
+    return "bg-success-500";
   };
 
   return (
@@ -92,7 +92,7 @@ export function PredictionSlider({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         className={`relative h-3 rounded-full bg-muted cursor-pointer touch-none ${
-          disabled ? 'opacity-50 cursor-not-allowed' : ''
+          disabled ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
         {/* Fill */}
@@ -104,7 +104,7 @@ export function PredictionSlider({
         {/* Thumb */}
         <div
           className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-white shadow-md transition-none ${getColor()} ${
-            disabled ? '' : 'hover:scale-110'
+            disabled ? "" : "hover:scale-110"
           }`}
           style={{ left: `${percentage}%` }}
         />
@@ -113,7 +113,7 @@ export function PredictionSlider({
       {/* Value Display and Input */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex gap-2">
-          {[0, 25, 50, 75, 100].map(preset => (
+          {[0, 25, 50, 75, 100].map((preset) => (
             <button
               key={preset}
               type="button"
@@ -121,9 +121,9 @@ export function PredictionSlider({
               disabled={disabled}
               className={`px-2 py-1 text-xs rounded transition-colors ${
                 value === preset
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {preset}%
             </button>
