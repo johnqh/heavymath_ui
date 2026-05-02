@@ -29,7 +29,7 @@ export function initHeavymathUI(config: HeavymathAppConfig): void {
 export function getAppConfig(): HeavymathAppConfig {
   if (!_appConfig) {
     throw new Error(
-      "heavymath_ui not initialized. Call initHeavymathUI() first.",
+      'heavymath_ui not initialized. Call initHeavymathUI() first.'
     );
   }
   return _appConfig;

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface AnimatedCollapseProps {
   open: boolean;
@@ -13,13 +13,13 @@ export function AnimatedCollapse({
 }: AnimatedCollapseProps) {
   return (
     <div
-      className="grid overflow-hidden"
+      className='grid overflow-hidden'
       style={{
-        gridTemplateRows: open ? "1fr" : "0fr",
+        gridTemplateRows: open ? '1fr' : '0fr',
         transition: `grid-template-rows ${duration}ms ease-in-out`,
       }}
     >
-      <div className="min-h-0">{children}</div>
+      <div className='min-h-0'>{children}</div>
     </div>
   );
 }

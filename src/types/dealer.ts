@@ -4,7 +4,7 @@
  * Dealers are users who hold special NFTs that grant permission to create and manage prediction markets.
  */
 
-import type { Address } from "viem";
+import type { Address } from 'viem';
 
 /**
  * Represents a Dealer NFT and its current ownership status.
@@ -48,7 +48,7 @@ export const PERMISSION_WILDCARD = 0xff;
 export function hasPermission(
   permission: DealerPermission,
   category: number,
-  subCategory: number,
+  subCategory: number
 ): boolean {
   // Check category match (or wildcard)
   if (

@@ -1,4 +1,4 @@
-import { parseChainPrefixedId } from "@sudobility/heavymath_types";
+import { parseChainPrefixedId } from '@sudobility/heavymath_types';
 
 /**
  * Extract the on-chain numeric market ID from a chain-prefixed ID string.
@@ -8,7 +8,7 @@ import { parseChainPrefixedId } from "@sudobility/heavymath_types";
  */
 export function getOnChainMarketId(chainPrefixedId: string): bigint {
   const { identifier } = parseChainPrefixedId(
-    chainPrefixedId as `${number}-${string}`,
+    chainPrefixedId as `${number}-${string}`
   );
   return BigInt(identifier);
 }

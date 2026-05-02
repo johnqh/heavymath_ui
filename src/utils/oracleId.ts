@@ -4,8 +4,8 @@
  * Format: [1 byte sport code][31 bytes game ID (uint248)]
  */
 
-import { pad, toHex, hexToBigInt, type Hex } from "viem";
-import { isSportCode, type SportCode } from "../config/sportCodes";
+import { pad, toHex, hexToBigInt, type Hex } from 'viem';
+import { isSportCode, type SportCode } from '../config/sportCodes';
 
 /**
  * Encode a sport code and game ID into a bytes32 oracleId.

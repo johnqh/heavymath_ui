@@ -1,5 +1,5 @@
-import { getCurrentDatetime } from "@sudobility/heavymath_types";
-import { getAppConfig } from "../config/app";
+import { getCurrentDatetime } from '@sudobility/heavymath_types';
+import { getAppConfig } from '../config/app';
 
 export function getNow(): Date {
   return getCurrentDatetime(getAppConfig().testMode ?? false);

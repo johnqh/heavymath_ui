@@ -29,7 +29,7 @@ export {
   useTestMode,
   useContractOwner,
   usePendingResolution,
-} from "./useMarketContract";
+} from './useMarketContract';
 
 /** Contract interaction hooks with toast notification feedback */
 export {
@@ -46,7 +46,7 @@ export {
   useClaimLockRefundWithToast,
   useCancelMarketWithToast,
   useWithdrawDealerFeesWithToast,
-} from "./useContractWithToast";
+} from './useContractWithToast';
 
 /** Dealer NFT hooks */
-export { useMintDealerNFT, useMintDealerNFTWithToast } from "./useDealerNFT";
+export { useMintDealerNFT, useMintDealerNFTWithToast } from './useDealerNFT';

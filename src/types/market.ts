@@ -9,16 +9,16 @@ export type {
   Market as IndexerMarket,
   Prediction as IndexerPrediction,
   MarketFilters as IndexerMarketFilters,
-} from "@heavymath/indexer_client";
+} from '@heavymath/indexer_client';
 
 /** String-based market status values matching the indexer API responses */
 export type MarketStatusString =
-  | "Active"
-  | "Locked"
-  | "Resolved"
-  | "Cancelled"
-  | "Abandoned"
-  | "Refunded";
+  | 'Active'
+  | 'Locked'
+  | 'Resolved'
+  | 'Cancelled'
+  | 'Abandoned'
+  | 'Refunded';
 
 /**
  * Numeric market status values matching the smart contract.
@@ -42,16 +42,16 @@ export type MarketStatus = (typeof MarketStatus)[keyof typeof MarketStatus];
  */
 export function statusStringToNumber(status: MarketStatusString): MarketStatus {
   switch (status) {
-    case "Active":
+    case 'Active':
       return MarketStatus.Active;
-    case "Locked":
+    case 'Locked':
       return MarketStatus.Locked;
-    case "Resolved":
+    case 'Resolved':
       return MarketStatus.Resolved;
-    case "Cancelled":
-    case "Refunded":
+    case 'Cancelled':
+    case 'Refunded':
       return MarketStatus.Cancelled;
-    case "Abandoned":
+    case 'Abandoned':
       return MarketStatus.Abandoned;
     default:
       return MarketStatus.Active;
@@ -60,10 +60,10 @@ export function statusStringToNumber(status: MarketStatusString): MarketStatus {
 
 /** Sort options for the market list view */
 export type MarketSortOption =
-  | "newest"
-  | "deadline"
-  | "poolSize"
-  | "mostActive";
+  | 'newest'
+  | 'deadline'
+  | 'poolSize'
+  | 'mostActive';
 
 /**
  * Data required to create a new prediction market via the smart contract.
@@ -111,9 +111,9 @@ export interface UpdatePredictionData {
  * Market category constants matching the smart contract.
  */
 export const CATEGORIES = {
-  SPORTS: "1",
-  CRYPTO: "2",
-  EVENTS: "3",
+  SPORTS: '1',
+  CRYPTO: '2',
+  EVENTS: '3',
 } as const;
 
 /** Union type of all category values */

@@ -1,6 +1,6 @@
-import { Navigate, useParams } from "react-router-dom";
-import { useAuth } from "../../context/WalletAuthContext";
-import type { ReactNode } from "react";
+import { Navigate, useParams } from 'react-router-dom';
+import { useAuth } from '../../context/WalletAuthContext';
+import type { ReactNode } from 'react';
 
 interface ProtectedRouteProps {
   children: ReactNode;

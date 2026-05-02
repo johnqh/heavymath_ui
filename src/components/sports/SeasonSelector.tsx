@@ -4,9 +4,9 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@sudobility/components";
-import { variants } from "@sudobility/design";
-import type { SeasonOption } from "../../utils/sportsSeason";
+} from '@sudobility/components';
+import { variants } from '@sudobility/design';
+import type { SeasonOption } from '../../utils/sportsSeason';
 
 interface SeasonSelectorProps {
   seasons: SeasonOption[];
@@ -39,7 +39,7 @@ export function SeasonSelector({
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        {seasons.map((season) => (
+        {seasons.map(season => (
           <SelectItem key={season.value} value={season.value}>
             {season.label}
           </SelectItem>

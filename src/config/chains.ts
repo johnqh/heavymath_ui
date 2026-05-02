@@ -1,4 +1,4 @@
-import { mainnet, sepolia, polygon, arbitrum, optimism } from "viem/chains";
+import { mainnet, sepolia, polygon, arbitrum, optimism } from 'viem/chains';
 
 // Supported chains for the prediction market
 export const supportedChains = [
@@ -23,10 +23,10 @@ export const CHAIN_IDS = {
 
 // Get chain by ID
 export function getChainById(chainId: number) {
-  return supportedChains.find((chain) => chain.id === chainId);
+  return supportedChains.find(chain => chain.id === chainId);
 }
 
 // Check if chain is supported
 export function isSupportedChain(chainId: number): boolean {
-  return supportedChains.some((chain) => chain.id === chainId);
+  return supportedChains.some(chain => chain.id === chainId);
 }

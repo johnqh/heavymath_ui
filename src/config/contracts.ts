@@ -1,5 +1,5 @@
-import type { Address } from "viem";
-import { CHAIN_IDS } from "./chains";
+import type { Address } from 'viem';
+import { CHAIN_IDS } from './chains';
 
 export interface ContractAddresses {
   predictionMarket: Address;
@@ -8,7 +8,7 @@ export interface ContractAddresses {
   usdc: Address;
 }
 
-const ZERO: Address = "0x0000000000000000000000000000000000000000";
+const ZERO: Address = '0x0000000000000000000000000000000000000000';
 
 // Default addresses per chain (well-known USDC addresses, zero for contracts)
 const defaultAddresses: Record<number, ContractAddresses> = {
@@ -22,25 +22,25 @@ const defaultAddresses: Record<number, ContractAddresses> = {
     predictionMarket: ZERO,
     dealerNFT: ZERO,
     oracleResolver: ZERO,
-    usdc: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" as Address,
+    usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as Address,
   },
   [CHAIN_IDS.POLYGON]: {
     predictionMarket: ZERO,
     dealerNFT: ZERO,
     oracleResolver: ZERO,
-    usdc: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359" as Address,
+    usdc: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359' as Address,
   },
   [CHAIN_IDS.ARBITRUM]: {
     predictionMarket: ZERO,
     dealerNFT: ZERO,
     oracleResolver: ZERO,
-    usdc: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831" as Address,
+    usdc: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as Address,
   },
   [CHAIN_IDS.OPTIMISM]: {
     predictionMarket: ZERO,
     dealerNFT: ZERO,
     oracleResolver: ZERO,
-    usdc: "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85" as Address,
+    usdc: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85' as Address,
   },
 };
 
@@ -52,13 +52,13 @@ const _overrides: Record<number, Partial<ContractAddresses>> = {};
  */
 export function setContractAddresses(
   chainId: number,
-  addresses: Partial<ContractAddresses>,
+  addresses: Partial<ContractAddresses>
 ): void {
   _overrides[chainId] = { ..._overrides[chainId], ...addresses };
 }
 
 export function getContractAddresses(
-  chainId: number,
+  chainId: number
 ): ContractAddresses | undefined {
   const defaults = defaultAddresses[chainId];
   const overrides = _overrides[chainId];
@@ -76,7 +76,7 @@ export function getContractAddresses(
 
 export function getContractAddress(
   chainId: number,
-  contract: keyof ContractAddresses,
+  contract: keyof ContractAddresses
 ): Address | undefined {
   return getContractAddresses(chainId)?.[contract];
 }
