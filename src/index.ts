@@ -72,6 +72,27 @@ export {
 } from './utils/sportsSeason';
 export type { SeasonOption } from './utils/sportsSeason';
 export { getNow, toChainDate } from './utils/datetime';
+export {
+  ConditionType,
+  ScoreType,
+  TeamSide,
+  ComparisonOperator,
+  encodeConditionData,
+  decodeConditionData,
+  formatConditionDescription,
+} from './utils/conditionData';
+export type {
+  ConditionData,
+  ConditionTypeValue,
+  ScoreTypeValue,
+  TeamSideValue,
+  ComparisonOperatorValue,
+  WinLossCondition,
+  MatchScoreCondition,
+  TournamentCondition,
+} from './utils/conditionData';
+export { getMarketDisplayInfo } from './utils/marketDisplay';
+export type { MarketDisplayInfo } from './utils/marketDisplay';
 
 // Lib
 export { EVMPredictionClient } from './lib/evmClient';
@@ -87,6 +108,13 @@ export { IndexerProvider, useIndexer } from './context/IndexerContext';
 // Hooks (barrel)
 export * from './hooks';
 
+// Hooks - additional
+export { useToastActions } from './hooks/useToastActions';
+export { useDealerPermission } from './hooks/useDealerPermission';
+export { useGameMarkets } from './hooks/useGameMarkets';
+export { useLeagueMarkets } from './hooks/useLeagueMarkets';
+export { useGameIdsWithMarkets } from './hooks/useFilteredSportsData';
+
 // Components - Market
 export { MarketCard } from './components/market/MarketCard';
 export { MarketList } from './components/market/MarketList';
@@ -95,6 +123,10 @@ export { PredictionSlider } from './components/market/PredictionSlider';
 export { GameMarketsSection } from './components/market/GameMarketsSection';
 export { LeagueMarketsSection } from './components/market/LeagueMarketsSection';
 export { TeamMarketsSection } from './components/market/TeamMarketsSection';
+export { InlineCreateMarketForm } from './components/market/InlineCreateMarketForm';
+export { TournamentMarketForm } from './components/market/TournamentMarketForm';
+export { TeamTournamentMarketForm } from './components/market/TeamTournamentMarketForm';
+export { SportPredictionCard } from './components/market/SportPredictionCard';
 
 // Components - Sports
 export { SeasonSelector } from './components/sports/SeasonSelector';
