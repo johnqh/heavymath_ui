@@ -6,7 +6,6 @@ import {
   useRef,
   type ReactNode,
 } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useConnect, useDisconnect, type Connector } from 'wagmi';
 import { ChainType } from '@sudobility/types';
@@ -106,8 +105,6 @@ export function WalletConnectionModal({
   onClose,
   socialLoginSection,
 }: WalletConnectionModalProps) {
-  const { lang } = useParams<{ lang: string }>();
-  const navigate = useNavigate();
   const { t } = useTranslation('connectWalletPage');
   const { address, status, signVerificationMessage } = useAuth();
   const { connectors, connect } = useConnect();
@@ -143,7 +140,6 @@ export function WalletConnectionModal({
 
     if (status === AuthStatus.Verified) {
       onClose();
-      navigate(`/${lang}/wallet`);
     } else if (status === AuthStatus.Connected && step !== 'sign') {
       setStep('sign');
       if (activeConnector) {
@@ -155,7 +151,7 @@ export function WalletConnectionModal({
       setConnectingWallet(null);
       setConnectedWalletProvider(null);
     }
-  }, [status, navigate, step, lang, activeConnector, isOpen, onClose]);
+  }, [status, step, activeConnector, isOpen, onClose]);
 
   // Reset connection
   const resetConnection = useCallback(async () => {
@@ -343,7 +339,6 @@ export function WalletConnectionModal({
 
       if (signed) {
         onClose();
-        navigate(`/${lang}/wallet`);
       } else {
         setError(
           t(
