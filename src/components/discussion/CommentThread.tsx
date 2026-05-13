@@ -19,7 +19,7 @@ export function CommentThread({
   deletingCommentId,
 }: CommentThreadProps) {
   return (
-    <div className="border-b border-gray-100 dark:border-gray-800 last:border-b-0">
+    <div className='border-b border-gray-100 dark:border-gray-800 last:border-b-0'>
       {/* Top-level comment */}
       <CommentItem
         comment={comment}
@@ -32,8 +32,8 @@ export function CommentThread({
 
       {/* Replies (flattened level 2) */}
       {comment.replies && comment.replies.length > 0 && (
-        <div className="mb-2">
-          {comment.replies.map((reply) => (
+        <div className='mb-2'>
+          {comment.replies.map(reply => (
             <CommentItem
               key={reply.id}
               comment={reply}

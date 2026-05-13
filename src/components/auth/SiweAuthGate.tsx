@@ -20,7 +20,12 @@ export function SiweAuthGate({ children }: { children: React.ReactNode }) {
   const { address, isConnected } = useAuth();
   const { indexerClient } = useIndexer();
   const { signMessageAsync } = useSignMessage();
-  const { isAuthenticated, address: storedAddress, setSession, clearSession } = useAuthStore();
+  const {
+    isAuthenticated,
+    address: storedAddress,
+    setSession,
+    clearSession,
+  } = useAuthStore();
 
   const isAuthenticating = useRef(false);
 
@@ -71,7 +76,10 @@ export function SiweAuthGate({ children }: { children: React.ReactNode }) {
         const signature = await signMessageAsync({ message });
 
         // 4. Verify with server
-        const verifyResponse = await indexerClient.verifySiwe(message, signature);
+        const verifyResponse = await indexerClient.verifySiwe(
+          message,
+          signature
+        );
         if (verifyResponse.data) {
           setSession(
             verifyResponse.data.token,

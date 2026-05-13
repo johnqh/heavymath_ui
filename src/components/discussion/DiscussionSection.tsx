@@ -1,6 +1,11 @@
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { IndexerClient, CommentData, DiscussionQuery, SubjectType } from '@sudobility/heavymath_indexer_client';
+import type {
+  IndexerClient,
+  CommentData,
+  DiscussionQuery,
+  SubjectType,
+} from '@sudobility/heavymath_indexer_client';
 import {
   useDiscussionComments,
   usePostComment,
@@ -27,16 +32,22 @@ export function DiscussionSection({
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [replyingTo, setReplyingTo] = useState<CommentData | null>(null);
-  const [deletingCommentId, setDeletingCommentId] = useState<number | null>(null);
+  const [deletingCommentId, setDeletingCommentId] = useState<number | null>(
+    null
+  );
 
   const query: DiscussionQuery = { subjectType, sport, subjectId };
 
   const { discussion, isLocked } = useDiscussionForEntity(client, query);
-  const { comments, pagination, isLoading } = useDiscussionComments(client, discussion?.id, {
-    page,
-    limit: 20,
-    sort: 'oldest',
-  });
+  const { comments, pagination, isLoading } = useDiscussionComments(
+    client,
+    discussion?.id,
+    {
+      page,
+      limit: 20,
+      sort: 'oldest',
+    }
+  );
   const { isAuthenticated: isAuthed, address } = useAuthSession();
   const postComment = usePostComment(client);
   const deleteComment = useDeleteComment(client);
@@ -74,17 +85,22 @@ export function DiscussionSection({
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {/* Comment list */}
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">Loading...</div>
+        <div className='py-8 text-center text-sm text-gray-500 dark:text-gray-400'>
+          Loading...
+        </div>
       ) : comments.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-          {t('discussion.no_comments', 'No comments yet. Be the first to comment!')}
+        <div className='py-8 text-center text-sm text-gray-500 dark:text-gray-400'>
+          {t(
+            'discussion.no_comments',
+            'No comments yet. Be the first to comment!'
+          )}
         </div>
       ) : (
         <div>
-          {comments.map((comment) => (
+          {comments.map(comment => (
             <CommentThread
               key={comment.id}
               comment={comment}
@@ -98,8 +114,8 @@ export function DiscussionSection({
           {/* Load more */}
           {pagination && page * pagination.limit < pagination.total && (
             <button
-              onClick={() => setPage((p) => p + 1)}
-              className="w-full py-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              onClick={() => setPage(p => p + 1)}
+              className='w-full py-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
             >
               {t('discussion.load_more', 'Load more comments')}
             </button>
@@ -119,7 +135,7 @@ export function DiscussionSection({
 
       {/* Error display */}
       {postComment.isError && (
-        <div className="text-sm text-red-600 dark:text-red-400">
+        <div className='text-sm text-red-600 dark:text-red-400'>
           {postComment.error?.message ||
             t('discussion.moderation_error', 'Failed to post comment.')}
         </div>
