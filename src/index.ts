@@ -146,6 +146,10 @@ export { default as ConnectedWalletMenu } from './components/wallet/ConnectedWal
 export { ProtectedRoute } from './components/wallet/ProtectedRoute';
 export { DealerRoute } from './components/wallet/DealerRoute';
 
+// Components - Discussion
+export { DiscussionSection } from './components/discussion';
+export type { DiscussionSectionProps } from './components/discussion';
+
 // Components - Icons
 export * from './components/icons';
 

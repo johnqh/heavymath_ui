@@ -81,5 +81,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/sudobility-usf/heavymath_ui.git"
+  },
+  "dependencies": {
+    "react-markdown": "^10.1.0",
+    "rehype-sanitize": "^6.0.0"
   }
 }
