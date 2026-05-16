@@ -87,6 +87,20 @@ export function SiweAuthGate({ children }: { children: React.ReactNode }) {
             verifyResponse.data.expiresAt
           );
         }
+        // 5. Auto-drip ETH if balance is low
+        try {
+          const baseUrl = indexerClient['baseUrl'] as string;
+          const resp = await fetch(`${baseUrl}/api/faucet/eth`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address: address.toLowerCase() }),
+          });
+          if (resp.ok) {
+            console.debug('[SiweAuthGate] ETH faucet drip sent');
+          }
+        } catch {
+          // Silently fail — faucet is optional
+        }
       } catch (error) {
         // User rejected signature or network error — silently fail
         console.debug('[SiweAuthGate] Authentication skipped:', error);
