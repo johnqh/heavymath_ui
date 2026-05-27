@@ -15,7 +15,7 @@
         "@sudobility/di": "^1.5.56",
         "@sudobility/heavymath_contracts": "^0.1.69",
         "@sudobility/heavymath_indexer_client": "^0.0.56",
-        "@sudobility/heavymath_lib": "^0.0.81",
+        "@sudobility/heavymath_lib": "^0.0.82",
         "@sudobility/heavymath_types": "^0.0.32",
         "@sudobility/types": "^1.9.62",
         "@sudobility/web3-components": "^2.0.15",
@@ -45,7 +45,7 @@
         "@sudobility/di": "^1.5.56",
         "@sudobility/heavymath_contracts": "^0.1.69",
         "@sudobility/heavymath_indexer_client": "^0.0.56",
-        "@sudobility/heavymath_lib": "^0.0.81",
+        "@sudobility/heavymath_lib": "^0.0.82",
         "@sudobility/heavymath_types": "^0.0.32",
         "@sudobility/types": "^1.9.62",
         "@sudobility/web3-components": "^2.0.15",
@@ -541,7 +541,7 @@
 
     "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.56", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-HRnkax8Apx7VvVOQCnH0jBB+p36/r+DcJzb/21cSkBJBN5M3cRIazMIs6P8EZmWLYRpOefZfTLa7Qp1+5+mpJg=="],
 
-    "@sudobility/heavymath_lib": ["@sudobility/heavymath_lib@0.0.81", "", { "peerDependencies": { "@sudobility/auctions_contracts": "^0.1.19", "@sudobility/heavymath_contracts": "^0.1.68", "@sudobility/heavymath_indexer_client": "^0.0.56", "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-sA3JsLwpeIs6YtaQOzofBU0WeTodwolewkgW5Rgxy6lf/jInz2c4g4mgYeugib4yyL7hORcRc5aXGvONt3o37g=="],
+    "@sudobility/heavymath_lib": ["@sudobility/heavymath_lib@0.0.82", "", { "peerDependencies": { "@sudobility/auctions_contracts": "^0.1.19", "@sudobility/heavymath_contracts": "^0.1.69", "@sudobility/heavymath_indexer_client": "^0.0.56", "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-nYH6XWkNHQ/ZPN7fZ/fklzvxC111f6tmiy9eOsmGIJQuF/f3J/bU+BdnsY6UEZDaijCSlnJKB8Fpr25NedlxsA=="],
 
     "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.32", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-tcXVsA7MEI7ZrDAv4SyURqus08HtHrmBN07O6p8fVNdEpFMcxveL5pAM/ENcy9dCYt0do6dh70HLuPzhrsy//Q=="],
 
