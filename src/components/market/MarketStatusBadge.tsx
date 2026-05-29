@@ -11,7 +11,7 @@ export function MarketStatusBadge({
   status,
   size = 'sm',
 }: MarketStatusBadgeProps) {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('market');
 
   const statusConfig: Record<string, { label: string; className: string }> = {
     Active: {
