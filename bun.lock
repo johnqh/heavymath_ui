@@ -13,9 +13,9 @@
         "@sudobility/components": "^5.0.70",
         "@sudobility/design": "^1.1.30",
         "@sudobility/di": "^1.5.56",
-        "@sudobility/heavymath_contracts": "^0.1.70",
-        "@sudobility/heavymath_indexer_client": "^0.0.56",
-        "@sudobility/heavymath_lib": "^0.0.82",
+        "@sudobility/heavymath_contracts": "^0.1.71",
+        "@sudobility/heavymath_indexer_client": "^0.0.57",
+        "@sudobility/heavymath_lib": "^0.0.83",
         "@sudobility/heavymath_types": "^0.0.32",
         "@sudobility/types": "^1.9.62",
         "@sudobility/web3-components": "^2.0.15",
@@ -43,9 +43,9 @@
         "@sudobility/components": "^5.0.70",
         "@sudobility/design": "^1.1.30",
         "@sudobility/di": "^1.5.56",
-        "@sudobility/heavymath_contracts": "^0.1.70",
-        "@sudobility/heavymath_indexer_client": "^0.0.56",
-        "@sudobility/heavymath_lib": "^0.0.82",
+        "@sudobility/heavymath_contracts": "^0.1.71",
+        "@sudobility/heavymath_indexer_client": "^0.0.57",
+        "@sudobility/heavymath_lib": "^0.0.83",
         "@sudobility/heavymath_types": "^0.0.32",
         "@sudobility/types": "^1.9.62",
         "@sudobility/web3-components": "^2.0.15",
@@ -537,11 +537,11 @@
 
     "@sudobility/di": ["@sudobility/di@1.5.56", "", { "peerDependencies": { "@notifee/react-native": ">=7.0.0", "@react-native-async-storage/async-storage": ">=1.19.0", "@react-native-community/netinfo": ">=9.0.0", "@react-native-firebase/analytics": ">=18.0.0", "@react-native-firebase/app": ">=18.0.0", "@react-native-firebase/messaging": ">=18.0.0", "@react-native-firebase/remote-config": ">=18.0.0", "@sudobility/types": "^1.9.62", "firebase": ">=11.0.0", "react": ">=18.0.0", "react-native": ">=0.70.0" }, "optionalPeers": ["@notifee/react-native", "@react-native-async-storage/async-storage", "@react-native-community/netinfo", "@react-native-firebase/analytics", "@react-native-firebase/app", "@react-native-firebase/messaging", "@react-native-firebase/remote-config", "firebase", "react-native"] }, "sha512-AoE8QVHZcoiwG26nqSoP53Ph2yjtac5xfAThA6oSlkeE8j/IVWPvkhA1pGW5DJhEEL16Npsl7g7Fev335wz+0A=="],
 
-    "@sudobility/heavymath_contracts": ["@sudobility/heavymath_contracts@0.1.70", "", { "dependencies": { "@chainlink/contracts": "^1.3.0", "@openzeppelin/contracts-upgradeable": "^5.0.0" }, "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@sudobility/configs": "^0.0.73", "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@sudobility/configs", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-faLlS5Sb/pehn5EaWqJ8TvFCGhAmj+IOoR1Qfo3J/MdFk2EHe40mmXaRXnBb822eFuZuu869RHVBXt4oy8qddA=="],
+    "@sudobility/heavymath_contracts": ["@sudobility/heavymath_contracts@0.1.71", "", { "dependencies": { "@chainlink/contracts": "^1.3.0", "@openzeppelin/contracts-upgradeable": "^5.0.0" }, "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@sudobility/configs": "^0.0.73", "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@sudobility/configs", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-6cjtb+zi9FYS5h5nGKuIjS1xfFNOtmlhC9+8C/b0trMK56t4Cokj6Dgys5CQJewFwNEh50TYDeH+siOkMUN/xA=="],
 
-    "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.56", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-HRnkax8Apx7VvVOQCnH0jBB+p36/r+DcJzb/21cSkBJBN5M3cRIazMIs6P8EZmWLYRpOefZfTLa7Qp1+5+mpJg=="],
+    "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.57", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-7Olvq6LaKYXt5WBlNh0WXYmmgCQ390K0q9yF9zHnJZi+iTWy4+lLZP5qU/QQ5rBVNIOZd7FhI6fT6PGIz3BF/w=="],
 
-    "@sudobility/heavymath_lib": ["@sudobility/heavymath_lib@0.0.82", "", { "peerDependencies": { "@sudobility/auctions_contracts": "^0.1.19", "@sudobility/heavymath_contracts": "^0.1.69", "@sudobility/heavymath_indexer_client": "^0.0.56", "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-nYH6XWkNHQ/ZPN7fZ/fklzvxC111f6tmiy9eOsmGIJQuF/f3J/bU+BdnsY6UEZDaijCSlnJKB8Fpr25NedlxsA=="],
+    "@sudobility/heavymath_lib": ["@sudobility/heavymath_lib@0.0.83", "", { "peerDependencies": { "@sudobility/auctions_contracts": "^0.1.19", "@sudobility/heavymath_contracts": "^0.1.70", "@sudobility/heavymath_indexer_client": "^0.0.57", "@sudobility/heavymath_types": "^0.0.32", "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-f86/yqkNchLwqkbJHlELpPs10K/cdsgMzY2wk9qdxI4siCZflMHm+SkHxpa51CQN2Y6w5+Aq1ZmaJZz1dbVqmA=="],
 
     "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.32", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-tcXVsA7MEI7ZrDAv4SyURqus08HtHrmBN07O6p8fVNdEpFMcxveL5pAM/ENcy9dCYt0do6dh70HLuPzhrsy//Q=="],
 

@@ -4,7 +4,7 @@
 
 `@sudobility/heavymath_ui` is a shared UI component library for Heavymath prediction market apps. It provides React components, hooks, context providers, utilities, and configuration for wallet authentication, prediction markets, dealer management, sports data display, and discussion features.
 
-**Package**: `@sudobility/heavymath_ui` (v0.0.16, BUSL-1.1 license)
+**Package**: `@sudobility/heavymath_ui` (v0.0.19, BUSL-1.1 license)
 **Author**: John Huang
 
 ## Tech Stack
@@ -205,14 +205,48 @@ Provides IndexerClient singleton for data fetching.
 
 - `useIndexer()` - Returns `{ indexerClient }` for market and sports data
 
-## Hooks (13)
+## Hooks (42)
 
-### Contract Hooks
+### Contract Hooks (`useMarketContract.ts` — 22 hooks)
+
+| Hook | Purpose |
+|------|---------|
+| `useEVMClient` | Get EVMPredictionClient instance for current chain |
+| `usePlacePrediction` | Place a prediction on a market |
+| `useUpdatePrediction` | Update an existing prediction |
+| `useWithdrawPrediction` | Withdraw prediction before deadline |
+| `useClaimWinnings` | Claim winnings from resolved market |
+| `useClaimRefund` | Claim refund from cancelled/abandoned market |
+| `useClaimLockRefund` | Claim lock refund (middle-zone/boundary trim) |
+| `useOnChainMarket` | Read market data from contract |
+| `useOnChainPrediction` | Read prediction data from contract |
+| `useCreateMarket` | Create a new prediction market |
+| `useResolveMarket` | Manually resolve a market (dealer) |
+| `useResolveMarketWithOracle` | Resolve market via oracle |
+| `useRequestOracleResolution` | Initiate async Chainlink resolution |
+| `useCompleteOracleResolution` | Complete resolution after callback |
+| `useLockMarket` | Lock market after deadline |
+| `useLockRefundAmount` | Read lock refund amount for predictor |
+| `useMarketSplit` | Read market split boundaries |
+| `useCancelMarket` | Cancel market (no predictions) |
+| `useWithdrawDealerFees` | Withdraw dealer fees |
+| `useTestMode` | Enable/disable test mode (owner) |
+| `useContractOwner` | Read contract owner address |
+| `usePendingResolution` | Check pending resolution state |
+
+### Toast-Wrapped Contract Hooks (`useContractWithToast.ts` — 13 hooks)
+
+Each wraps the base contract hook with toast notifications for transaction feedback:
+`usePlacePredictionWithToast`, `useUpdatePredictionWithToast`, `useWithdrawPredictionWithToast`, `useClaimWinningsWithToast`, `useClaimRefundWithToast`, `useClaimLockRefundWithToast`, `useCreateMarketWithToast`, `useResolveMarketWithToast`, `useLockMarketWithToast`, `useCancelMarketWithToast`, `useWithdrawDealerFeesWithToast`, `useResolveMarketWithOracleWithToast`, `useRequestOracleResolutionWithToast`
+
+### Dealer Hooks
 
 | Hook | File | Purpose |
 |------|------|---------|
-| `usePlacePrediction`, `useClaimWinnings`, `useCreateMarket`, etc. | `useMarketContract.ts` | Base contract interaction hooks |
-| `usePlacePredictionWithToast`, etc. | `useContractWithToast.ts` | Contract hooks wrapped with toast notifications |
+| `useDealerNFT` | `useDealerNFT.ts` | NFT ownership and permissions |
+| `useMintDealerNFT` | `useDealerNFT.ts` | Mint dealer NFT |
+| `useMintDealerNFTWithToast` | `useDealerNFT.ts` | Mint with toast feedback |
+| `useDealerPermission` | `useDealerPermission.ts` | Check dealer permissions |
 
 ### Market Hooks
 
@@ -221,18 +255,12 @@ Provides IndexerClient singleton for data fetching.
 | `useGameMarkets` | `useGameMarkets.ts` | Query markets for a specific game |
 | `useLeagueMarkets` | `useLeagueMarkets.ts` | Query markets for a league |
 
-### Dealer Hooks
-
-| Hook | File | Purpose |
-|------|------|---------|
-| `useDealerNFT` | `useDealerNFT.ts` | NFT minting operations |
-| `useDealerPermission` | `useDealerPermission.ts` | Check dealer permissions |
-
 ### Other Hooks
 
 | Hook | File | Purpose |
 |------|------|---------|
 | `useFilteredSportsData` | `useFilteredSportsData.ts` | Filter sports data |
+| `useGameIdsWithMarkets` | `useFilteredSportsData.ts` | Get game IDs that have markets |
 | `useToastActions` | `useToastActions.ts` | Toast feedback helpers for transactions |
 
 ## Key Types
@@ -288,6 +316,7 @@ Provides IndexerClient singleton for data fetching.
 - `hasSeasonValue(options, value)` - Check if value exists in options
 - `formatSeasonLabel(season)` - Format season for display
 - `normalizeSeasonSortValue(value)` - Normalize for sorting
+- `getNumericSeasonValue(value)` — Extract numeric value from season string
 
 ### Date/Time (`utils/datetime.ts`)
 
