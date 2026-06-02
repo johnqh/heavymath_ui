@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import type {
   IndexerClient,
   CommentData,
@@ -15,6 +14,7 @@ import {
 import { useDiscussionForEntity } from '@sudobility/heavymath_lib';
 import { CommentThread } from './CommentThread';
 import { CommentComposer } from './CommentComposer';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 export interface DiscussionSectionProps {
   client: IndexerClient;
@@ -29,7 +29,7 @@ export function DiscussionSection({
   sport,
   subjectId,
 }: DiscussionSectionProps) {
-  const { t } = useTranslation();
+  const text = useHeavymathUiText();
   const [page, setPage] = useState(1);
   const [replyingTo, setReplyingTo] = useState<CommentData | null>(null);
   const [deletingCommentId, setDeletingCommentId] = useState<number | null>(
@@ -89,14 +89,11 @@ export function DiscussionSection({
       {/* Comment list */}
       {isLoading ? (
         <div className='py-8 text-center text-sm text-gray-500 dark:text-gray-400'>
-          Loading...
+          {text('common.loading')}
         </div>
       ) : comments.length === 0 ? (
         <div className='py-8 text-center text-sm text-gray-500 dark:text-gray-400'>
-          {t(
-            'discussion.no_comments',
-            'No comments yet. Be the first to comment!'
-          )}
+          {text('discussion.no_comments')}
         </div>
       ) : (
         <div>
@@ -117,7 +114,7 @@ export function DiscussionSection({
               onClick={() => setPage(p => p + 1)}
               className='w-full py-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
             >
-              {t('discussion.load_more', 'Load more comments')}
+              {text('discussion.load_more')}
             </button>
           )}
         </div>
@@ -136,8 +133,7 @@ export function DiscussionSection({
       {/* Error display */}
       {postComment.isError && (
         <div className='text-sm text-red-600 dark:text-red-400'>
-          {postComment.error?.message ||
-            t('discussion.moderation_error', 'Failed to post comment.')}
+          {postComment.error?.message || text('discussion.moderation_error')}
         </div>
       )}
     </div>

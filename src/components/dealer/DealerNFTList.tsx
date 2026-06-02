@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useReadContracts, useChainId } from 'wagmi';
 import { getContractAddress } from '../../config/contracts';
 import { ui } from '@sudobility/design';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 const HAS_PERMISSIONS_ABI = [
   {
@@ -19,7 +19,7 @@ interface DealerNFTListProps {
 }
 
 export function DealerNFTList({ tokenIds }: DealerNFTListProps) {
-  const { t } = useTranslation('dealer');
+  const text = useHeavymathUiText();
   const chainId = useChainId();
   const dealerNFTAddress = getContractAddress(chainId, 'dealerNFT');
 
@@ -42,9 +42,7 @@ export function DealerNFTList({ tokenIds }: DealerNFTListProps) {
 
   return (
     <div>
-      <h2 className={`${ui.text.h3} mb-4`}>
-        {t('dashboard.nfts.title', 'Your Dealer NFTs')}
-      </h2>
+      <h2 className={`${ui.text.h3} mb-4`}>{text('dashboard.nfts.title')}</h2>
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3'>
         {tokenIds.map((tokenId, index) => {
           const hasPermissions =
@@ -57,7 +55,7 @@ export function DealerNFTList({ tokenIds }: DealerNFTListProps) {
               className='p-4 rounded-lg border border-border bg-card flex flex-col items-center gap-2'
             >
               <p className={`${ui.text.h4} text-center`}>
-                {t('dashboard.nfts.tokenId', { id: tokenId.toString() })}
+                {text('dashboard.nfts.tokenId', { id: tokenId.toString() })}
               </p>
               {permissionResults ? (
                 <span
@@ -68,8 +66,8 @@ export function DealerNFTList({ tokenIds }: DealerNFTListProps) {
                   }`}
                 >
                   {hasPermissions
-                    ? t('dashboard.nfts.hasPermissions', 'Active')
-                    : t('dashboard.nfts.noPermissions', 'No Permissions')}
+                    ? text('dashboard.nfts.hasPermissions')
+                    : text('dashboard.nfts.noPermissions')}
                 </span>
               ) : (
                 <span className='inline-block h-4 w-16 bg-muted rounded animate-pulse' />

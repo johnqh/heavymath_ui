@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   Select,
@@ -24,6 +23,7 @@ import { ui } from '@sudobility/design';
 import { getNow, toChainDate } from '../../utils/datetime';
 import { CATEGORIES } from '../../types/market';
 import type { SportCode } from '../../config/sportCodes';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 type MarketType = 'winloss' | 'matchscore';
 type WinLossOutcome = 'win' | 'win_or_draw' | 'draw_or_lose';
@@ -61,7 +61,7 @@ export function InlineCreateMarketForm({
   onPollingChange,
   gameStarted = false,
 }: InlineCreateMarketFormProps) {
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const queryClient = useQueryClient();
   const { isDealer, dealerTokenIds } = useAuth();
   const { indexerClient } = useIndexer();
@@ -127,13 +127,13 @@ export function InlineCreateMarketForm({
 
   const autoTitle = (() => {
     if (variant === 'race')
-      return t('inlineCreateMarket.titleOnDate', {
+      return text('inlineCreateMarket.titleOnDate', {
         team: homeTeamName,
         date: shortDateStr,
       });
     if (marketType === 'winloss') {
-      const outcome = t(OUTCOME_LABEL_KEYS[winLossOutcome]);
-      return t('inlineCreateMarket.titleWinloss', {
+      const outcome = text(OUTCOME_LABEL_KEYS[winLossOutcome]);
+      return text('inlineCreateMarket.titleWinloss', {
         team: teamName,
         outcome,
         other: otherTeamName,
@@ -162,8 +162,8 @@ export function InlineCreateMarketForm({
           'inlineCreateMarket.scoresAtMost',
           'inlineCreateMarket.doesNotScore',
         ];
-    const phrase = t(phraseKeys[op] ?? phraseKeys[0], { val });
-    return t('inlineCreateMarket.titleScore', {
+    const phrase = text(phraseKeys[op] ?? phraseKeys[0], { val });
+    return text('inlineCreateMarket.titleScore', {
       team: side,
       phrase,
       other: otherSide,
@@ -173,12 +173,12 @@ export function InlineCreateMarketForm({
 
   const autoDescription = (() => {
     if (variant === 'race')
-      return t('inlineCreateMarket.descriptionSingle', {
+      return text('inlineCreateMarket.descriptionSingle', {
         team: homeTeamName,
         league: leagueStr,
         date: dateStr,
       });
-    return t('inlineCreateMarket.descriptionVs', {
+    return text('inlineCreateMarket.descriptionVs', {
       home: homeTeamName,
       away: awayTeamName,
       league: leagueStr,
@@ -325,7 +325,7 @@ export function InlineCreateMarketForm({
     return (
       <div className='rounded-lg border border-dashed border-amber-500/40 bg-amber-500/5 p-4'>
         <p className='text-sm text-amber-700 dark:text-amber-400'>
-          {t('dealer.noPermission')}
+          {text('dealer.noPermission')}
         </p>
       </div>
     );
@@ -339,9 +339,7 @@ export function InlineCreateMarketForm({
       >
         <div className='flex items-center gap-2'>
           <span className='text-lg font-semibold text-primary'>+</span>
-          <span className='font-medium'>
-            {t('markets.createMarket', 'Create Market')}
-          </span>
+          <span className='font-medium'>{text('markets.createMarket')}</span>
         </div>
         <svg
           className={`w-5 h-5 text-muted-foreground transition-transform ${isExpanded ? 'rotate-180' : ''}`}
@@ -370,7 +368,7 @@ export function InlineCreateMarketForm({
             {variant === 'team-sport' && (
               <div className='md:w-44'>
                 <label className='block text-sm font-medium mb-1'>
-                  {t('markets.positiveTeam', 'Team')}
+                  {text('markets.positiveTeam')}
                 </label>
                 <Select
                   value={positiveTeamSide}
@@ -390,7 +388,7 @@ export function InlineCreateMarketForm({
             )}
             <div className='md:w-36'>
               <label className='block text-sm font-medium mb-1'>
-                {t('market.condition.conditionType', 'Type')}
+                {text('market.condition.conditionType')}
               </label>
               <Select
                 value={marketType}
@@ -401,10 +399,10 @@ export function InlineCreateMarketForm({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value='winloss'>
-                    {t('market.condition.winLoss', 'Win/Loss')}
+                    {text('market.condition.winLoss')}
                   </SelectItem>
                   <SelectItem value='matchscore'>
-                    {t('market.condition.matchScore', 'Match Score')}
+                    {text('market.condition.matchScore')}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -413,7 +411,7 @@ export function InlineCreateMarketForm({
             {marketType === 'winloss' && (
               <div className='md:w-36'>
                 <label className='block text-xs font-medium mb-1'>
-                  {t('market.condition.outcome', 'Outcome')}
+                  {text('market.condition.outcome')}
                 </label>
                 <Select
                   value={winLossOutcome}
@@ -426,13 +424,13 @@ export function InlineCreateMarketForm({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value='win'>
-                      {t('market.condition.win', 'Win')}
+                      {text('market.condition.win')}
                     </SelectItem>
                     <SelectItem value='win_or_draw'>
-                      {t('market.condition.winOrDraw', 'Win or Draw')}
+                      {text('market.condition.winOrDraw')}
                     </SelectItem>
                     <SelectItem value='draw_or_lose'>
-                      {t('market.condition.drawOrLose', 'Draw or Lose')}
+                      {text('market.condition.drawOrLose')}
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -443,7 +441,7 @@ export function InlineCreateMarketForm({
               <>
                 <div className='md:w-28'>
                   <label className='block text-xs font-medium mb-1'>
-                    {t('market.condition.scoreType', 'Score Type')}
+                    {text('market.condition.scoreType')}
                   </label>
                   <Select value={scoreType} onValueChange={setScoreType}>
                     <SelectTrigger>
@@ -451,17 +449,17 @@ export function InlineCreateMarketForm({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value='0'>
-                        {t('market.condition.absolute', 'Absolute')}
+                        {text('market.condition.absolute')}
                       </SelectItem>
                       <SelectItem value='1'>
-                        {t('market.condition.relative', 'Relative')}
+                        {text('market.condition.relative')}
                       </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className='md:w-24'>
                   <label className='block text-xs font-medium mb-1'>
-                    {t('market.condition.operator', 'Operator')}
+                    {text('market.condition.operator')}
                   </label>
                   <Select
                     value={scoreOperator}
@@ -482,7 +480,7 @@ export function InlineCreateMarketForm({
                 </div>
                 <div className='md:w-20'>
                   <label className='block text-xs font-medium mb-1'>
-                    {t('market.condition.value', 'Value')}
+                    {text('market.condition.value')}
                   </label>
                   <input
                     type='number'
@@ -497,7 +495,7 @@ export function InlineCreateMarketForm({
             <div className='flex-1' />
             <div className='md:w-52'>
               <label className='block text-sm font-medium mb-1'>
-                {t('markets.deadline', 'Deadline')}
+                {text('markets.deadline')}
               </label>
               <input
                 type='datetime-local'
@@ -507,10 +505,7 @@ export function InlineCreateMarketForm({
               />
               {deadline && !isDeadlineValid && (
                 <p className='mt-1 text-xs text-red-500'>
-                  {t(
-                    'markets.deadlineMinimum',
-                    'Deadline must be at least 24 hours from now'
-                  )}
+                  {text('markets.deadlineMinimum')}
                 </p>
               )}
             </div>
@@ -520,7 +515,7 @@ export function InlineCreateMarketForm({
           <div className='flex flex-col md:flex-row gap-3'>
             <div className='flex-1 min-w-0'>
               <label className='block text-sm font-medium mb-1'>
-                {t('markets.title', 'Title')}
+                {text('markets.title')}
               </label>
               <input
                 type='text'
@@ -540,7 +535,7 @@ export function InlineCreateMarketForm({
             </div>
             <div className='flex-1 min-w-0'>
               <label className='block text-sm font-medium mb-1'>
-                {t('markets.description', 'Description')}
+                {text('markets.description')}
               </label>
               <input
                 type='text'
@@ -567,11 +562,11 @@ export function InlineCreateMarketForm({
                 className={`p-2.5 rounded-lg ${ui.background.muted}/50 text-sm`}
               >
                 <span className='text-muted-foreground'>
-                  {t('inlineCreateMarket.condition')}{' '}
+                  {text('inlineCreateMarket.condition')}{' '}
                 </span>
                 <span className='font-medium'>
                   {marketType === 'winloss'
-                    ? `${positiveTeamSide === 'home' ? homeTeamName : awayTeamName} ${t(OUTCOME_LABEL_KEYS[winLossOutcome])}`
+                    ? `${positiveTeamSide === 'home' ? homeTeamName : awayTeamName} ${text(OUTCOME_LABEL_KEYS[winLossOutcome])}`
                     : formatConditionDescription(
                         {
                           type: ConditionType.MatchScore,
@@ -597,8 +592,8 @@ export function InlineCreateMarketForm({
               className='md:w-auto py-2.5 px-6 rounded-lg bg-primary text-primary-foreground font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors whitespace-nowrap flex-shrink-0'
             >
               {createMarket.isPending
-                ? t('markets.creating', 'Creating...')
-                : t('markets.create', 'Create')}
+                ? text('markets.creating')
+                : text('markets.create')}
             </button>
           </div>
         </div>

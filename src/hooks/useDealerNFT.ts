@@ -5,6 +5,7 @@ import { getAppConfig } from '../config/app';
 import { useMutation } from '@tanstack/react-query';
 import { erc20Abi } from 'viem';
 import { useToastActions } from './useToastActions';
+import { useHeavymathUiText } from '../components/HeavymathUiTextProvider';
 import { getContractAddress } from '../config/contracts';
 
 const DEALER_NFT_ABI = [
@@ -34,6 +35,7 @@ const DEALER_NFT_ABI = [
 export function useMintDealerNFT() {
   const config = useConfig();
   const chainId = getAppConfig().defaultChainId;
+  const text = useHeavymathUiText();
 
   return useMutation({
     mutationFn: async () => {
@@ -48,7 +50,7 @@ export function useMintDealerNFT() {
       const publicClient = getPublicClient(config, { chainId });
 
       if (!currentWalletClient || !publicClient) {
-        throw new Error('Wallet not connected');
+        throw new Error(text('errors.walletNotConnected'));
       }
 
       const dealerNFTAddress = getContractAddress(chainId, 'dealerNFT');
@@ -56,7 +58,7 @@ export function useMintDealerNFT() {
         !dealerNFTAddress ||
         dealerNFTAddress === '0x0000000000000000000000000000000000000000'
       ) {
-        throw new Error('DealerNFT contract not deployed on this chain');
+        throw new Error(text('errors.dealerNftNotDeployed'));
       }
 
       // Read mint price and stake token address from contract
@@ -119,24 +121,27 @@ export function useMintDealerNFT() {
 export function useMintDealerNFTWithToast() {
   const mutation = useMintDealerNFT();
   const toast = useToastActions();
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(async () => {
-    toast.txPending('Minting your Dealer NFT...');
+    toast.txPending(text('toast.mintingDealerNft'));
 
     try {
       const result = await mutation.mutateAsync();
       toast.success(
-        'Dealer NFT Minted',
-        'You are now a dealer! Start creating prediction markets.'
+        text('toast.dealerNftMinted'),
+        text('toast.dealerNftMintedDesc')
       );
       return result;
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Failed to mint Dealer NFT';
+        error instanceof Error
+          ? error.message
+          : text('toast.mintDealerNftFailed');
       toast.txError(message);
       throw error;
     }
-  }, [mutation, toast]);
+  }, [mutation, toast, text]);
 
   return {
     ...mutation,

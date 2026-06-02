@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
 import { TeamTournamentMarketForm } from './TeamTournamentMarketForm';
 import type { SportCode } from '../../config/sportCodes';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface TournamentOption {
   id: number;
@@ -25,19 +25,16 @@ export function TeamMarketsSection({
   season,
   tournaments,
 }: TeamMarketsSectionProps) {
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   return (
     <div>
       <h2 className='text-lg font-semibold mb-4'>
-        {t('markets.predictionMarkets', 'Prediction Markets')}
+        {text('markets.predictionMarkets')}
       </h2>
 
       <p className='text-sm text-muted-foreground mb-4'>
-        {t(
-          'markets.noMarketsForTeam',
-          'No prediction markets for this team yet.'
-        )}
+        {text('markets.noMarketsForTeam')}
       </p>
 
       <TeamTournamentMarketForm

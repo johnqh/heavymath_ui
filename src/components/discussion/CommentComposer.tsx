@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeSanitize from 'rehype-sanitize';
-import { useTranslation } from 'react-i18next';
 import type { CommentData } from '@sudobility/heavymath_indexer_client';
 import { formatAddress } from '../../utils/format';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 export interface CommentComposerProps {
   onSubmit: (
@@ -26,7 +26,7 @@ export function CommentComposer({
   replyingTo,
   onCancelReply,
 }: CommentComposerProps) {
-  const { t } = useTranslation();
+  const text = useHeavymathUiText();
   const [content, setContent] = useState('');
   const [showPreview, setShowPreview] = useState(false);
 
@@ -51,7 +51,7 @@ export function CommentComposer({
   if (isLocked) {
     return (
       <div className='p-4 text-center text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg'>
-        {t('discussion.closed', 'This discussion is closed.')}
+        {text('discussion.closed')}
       </div>
     );
   }
@@ -59,10 +59,7 @@ export function CommentComposer({
   if (!isAuthenticated) {
     return (
       <div className='p-4 text-center text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg'>
-        {t(
-          'discussion.sign_in_to_comment',
-          'Connect and sign in with your wallet to comment.'
-        )}
+        {text('discussion.sign_in_to_comment')}
       </div>
     );
   }
@@ -73,7 +70,7 @@ export function CommentComposer({
       {replyingTo && (
         <div className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
           <span>
-            Replying to{' '}
+            {text('discussion.replying_to')}{' '}
             <span className='font-medium text-blue-600 dark:text-blue-400'>
               {formatAddress(replyingTo.authorAddress)}
             </span>
@@ -97,7 +94,7 @@ export function CommentComposer({
               : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
           }`}
         >
-          Write
+          {text('discussion.write')}
         </button>
         <button
           onClick={() => setShowPreview(true)}
@@ -107,7 +104,7 @@ export function CommentComposer({
               : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
           }`}
         >
-          Preview
+          {text('discussion.preview')}
         </button>
       </div>
 
@@ -121,7 +118,9 @@ export function CommentComposer({
               </ReactMarkdown>
             </div>
           ) : (
-            <span className='text-gray-400 text-sm'>Nothing to preview</span>
+            <span className='text-gray-400 text-sm'>
+              {text('discussion.nothing_to_preview')}
+            </span>
           )}
         </div>
       ) : (
@@ -129,10 +128,7 @@ export function CommentComposer({
           value={content}
           onChange={e => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={t(
-            'discussion.post_comment',
-            'Write a comment... (Markdown supported)'
-          )}
+          placeholder={text('discussion.post_comment')}
           rows={3}
           maxLength={2000}
           className='w-full p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
@@ -148,10 +144,10 @@ export function CommentComposer({
           className='px-4 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
         >
           {isSubmitting
-            ? '...'
+            ? text('common.pendingEllipsis')
             : replyingTo
-              ? t('discussion.reply', 'Reply')
-              : t('discussion.post_comment', 'Comment')}
+              ? text('discussion.reply')
+              : text('discussion.post_comment')}
         </button>
       </div>
     </div>

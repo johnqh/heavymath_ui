@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import {
   Select,
   SelectTrigger,
@@ -6,6 +5,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@sudobility/components';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface DealerNFTSelectorProps {
   tokenIds: bigint[];
@@ -18,14 +18,14 @@ export function DealerNFTSelector({
   selectedTokenId,
   onSelect,
 }: DealerNFTSelectorProps) {
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   if (tokenIds.length <= 1) return null;
 
   return (
     <div className='md:w-44'>
       <label className='block text-sm font-medium mb-1'>
-        {t('dealer.selectNFT', 'Dealer NFT')}
+        {text('dealer.selectNFT')}
       </label>
       <Select
         value={
@@ -39,7 +39,7 @@ export function DealerNFTSelector({
         <SelectContent>
           {tokenIds.map(id => (
             <SelectItem key={String(id)} value={String(id)}>
-              {t('dealer.tokenLabel', 'Token #{{id}}', { id: String(id) })}
+              {text('dealer.tokenLabel', { id: String(id) })}
             </SelectItem>
           ))}
         </SelectContent>

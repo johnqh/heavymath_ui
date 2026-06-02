@@ -1,10 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import type { Market } from '@heavymath/indexer_client';
 import { MarketStatusBadge } from './MarketStatusBadge';
 import { formatDate } from '../../utils/format';
 import { getMarketDisplayInfo } from '../../utils/marketDisplay';
 import { ConditionType, decodeConditionData } from '../../utils/conditionData';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface MarketCardProps {
   market: Market;
@@ -13,7 +13,7 @@ interface MarketCardProps {
 
 export function MarketCard({ market, showCategory = true }: MarketCardProps) {
   const { lang } = useParams<{ lang: string }>();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const isActive = market.status === 'Active';
   const { category, subcategory, displayTitle, displaySubtitle } =
     getMarketDisplayInfo(market);
@@ -23,9 +23,9 @@ export function MarketCard({ market, showCategory = true }: MarketCardProps) {
     try {
       const condition = decodeConditionData(market.conditionData);
       if (condition.type === ConditionType.MatchScore)
-        return t('market.conditionScore', 'Score');
+        return text('market.conditionScore');
       if (condition.type === ConditionType.Tournament)
-        return t('market.conditionTournament', 'Tournament');
+        return text('market.conditionTournament');
       return null; // Don't show badge for WinLoss (default)
     } catch {
       return null;
@@ -77,7 +77,7 @@ export function MarketCard({ market, showCategory = true }: MarketCardProps) {
       <div className='flex items-center justify-between pt-4 border-t border-border'>
         <div className='flex items-center gap-2'>
           <span className='text-xs text-muted-foreground'>
-            {t('market.dealer', 'Dealer')}: {market.dealerAddress.slice(0, 6)}
+            {text('market.dealer')}: {market.dealerAddress.slice(0, 6)}
             ...
             {market.dealerAddress.slice(-4)}
           </span>
@@ -94,7 +94,7 @@ export function MarketCard({ market, showCategory = true }: MarketCardProps) {
         <div className='mt-3 flex items-center gap-2'>
           <span className='w-2 h-2 bg-success-500 rounded-full animate-pulse'></span>
           <span className='text-xs text-success-500'>
-            {t('market.openForPredictions', 'Open for predictions')}
+            {text('market.openForPredictions')}
           </span>
         </div>
       )}

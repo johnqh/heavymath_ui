@@ -1,5 +1,6 @@
 import { StarIcon as StarOutline } from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface FavoriteStarProps {
   favorited: boolean;
@@ -10,6 +11,10 @@ interface FavoriteStarProps {
   size?: 'sm' | 'md' | 'lg';
   /** Total favorite count across all users. Hidden when 0 or undefined. */
   count?: number;
+  /** Accessible label when favorited */
+  removeLabel?: string;
+  /** Accessible label when not favorited */
+  addLabel?: string;
 }
 
 const sizeClasses = {
@@ -38,7 +43,12 @@ export function FavoriteStar({
   className = '',
   size = 'md',
   count,
+  removeLabel,
+  addLabel,
 }: FavoriteStarProps) {
+  const text = useHeavymathUiText();
+  const effectiveRemoveLabel = removeLabel ?? text('favorites.remove');
+  const effectiveAddLabel = addLabel ?? text('favorites.add');
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -64,8 +74,8 @@ export function FavoriteStar({
         inline-flex items-center gap-0.5
         ${className}
       `}
-      title={favorited ? 'Remove from favorites' : 'Add to favorites'}
-      aria-label={favorited ? 'Remove from favorites' : 'Add to favorites'}
+      title={favorited ? effectiveRemoveLabel : effectiveAddLabel}
+      aria-label={favorited ? effectiveRemoveLabel : effectiveAddLabel}
     >
       <Icon
         className={`

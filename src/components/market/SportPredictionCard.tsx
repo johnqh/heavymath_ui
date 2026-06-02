@@ -1,5 +1,4 @@
 import { Link, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import type { Market } from '@heavymath/indexer_client';
 import { MarketStatusBadge } from './MarketStatusBadge';
 import { formatDate, formatUSDC } from '../../utils/format';
@@ -21,6 +20,7 @@ import {
   useClaimWinningsWithToast,
   useClaimRefundWithToast,
 } from '../../hooks';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 const SPORT_ICONS: Record<
   SportCode,
@@ -65,7 +65,7 @@ interface SportPredictionCardProps {
 
 export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
   const { lang } = useParams<{ lang: string }>();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const claimWinnings = useClaimWinningsWithToast();
   const claimRefund = useClaimRefundWithToast();
 
@@ -130,7 +130,7 @@ export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
             )}
             {sportInfo?.slug && (
               <span className='text-xs text-primary font-medium capitalize'>
-                {t(`nav.${sportInfo.slug}`, sportInfo.slug)}
+                {text(`nav.${sportInfo.slug}`)}
               </span>
             )}
           </div>
@@ -141,18 +141,18 @@ export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
           >
             {market?.title ||
               market?.description ||
-              `Market #${prediction.marketId}`}
+              text('fallbacks.marketWithId', { id: prediction.marketId })}
           </Link>
 
           <div className='flex items-center gap-4 mt-2 text-sm text-muted-foreground'>
             <span>
-              {t('sportPredictionCard.predicted')}{' '}
+              {text('sportPredictionCard.predicted')}{' '}
               <strong className='text-foreground'>
                 {prediction.percentage}%
               </strong>
             </span>
             <span>
-              {t('sportPredictionCard.staked')}{' '}
+              {text('sportPredictionCard.staked')}{' '}
               <strong className='text-foreground'>
                 {formatUSDC(BigInt(prediction.amount))}
               </strong>
@@ -166,7 +166,7 @@ export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
               to={gameLink}
               className='inline-block mt-2 text-xs text-primary hover:underline'
             >
-              {t('sportPredictionCard.viewGameDetails')}
+              {text('sportPredictionCard.viewGameDetails')}
             </Link>
           )}
         </div>
@@ -181,8 +181,8 @@ export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
               className='px-3 py-1.5 text-sm rounded-lg bg-success-500 text-white font-medium hover:bg-success-600 transition-colors disabled:opacity-50'
             >
               {claimWinnings.isPending
-                ? t('sportPredictionCard.claiming')
-                : t('sportPredictionCard.claim')}
+                ? text('sportPredictionCard.claiming')
+                : text('sportPredictionCard.claim')}
             </button>
           )}
 
@@ -193,14 +193,14 @@ export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
               className='px-3 py-1.5 text-sm rounded-lg bg-muted text-foreground font-medium hover:bg-muted/80 transition-colors disabled:opacity-50'
             >
               {claimRefund.isPending
-                ? t('sportPredictionCard.claiming')
-                : t('sportPredictionCard.refund')}
+                ? text('sportPredictionCard.claiming')
+                : text('sportPredictionCard.refund')}
             </button>
           )}
 
           {hasClaimed && (
             <span className='px-3 py-1.5 text-sm rounded-lg bg-muted text-muted-foreground'>
-              {t('sportPredictionCard.claimed')}
+              {text('sportPredictionCard.claimed')}
             </span>
           )}
         </div>
@@ -211,13 +211,13 @@ export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
         <div className='mt-3 pt-3 border-t border-border'>
           <div className='flex items-center gap-4 text-sm'>
             <span className='text-muted-foreground'>
-              {t('sportPredictionCard.yourPrediction')}{' '}
+              {text('sportPredictionCard.yourPrediction')}{' '}
               <strong className='text-foreground'>
                 {prediction.percentage}%
               </strong>
             </span>
             <span className='text-primary font-medium'>
-              {t('sportPredictionCard.marketResolved')}
+              {text('sportPredictionCard.marketResolved')}
             </span>
           </div>
         </div>

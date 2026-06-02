@@ -4,8 +4,8 @@
  */
 
 import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useToastActions } from './useToastActions';
+import { useHeavymathUiText } from '../components/HeavymathUiTextProvider';
 import {
   usePlacePrediction,
   useUpdatePrediction,
@@ -28,29 +28,29 @@ import {
 export function usePlacePredictionWithToast() {
   const mutation = usePlacePrediction();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.placingPrediction'));
+      toast.txPending(text('toast.placingPrediction'));
 
       try {
         const result = await mutation.mutateAsync(params);
         toast.success(
-          t('toast.predictionPlaced'),
-          t('toast.predictionPlacedDesc')
+          text('toast.predictionPlaced'),
+          text('toast.predictionPlacedDesc')
         );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.placePredictionFailed');
+            : text('toast.placePredictionFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -68,29 +68,29 @@ export function usePlacePredictionWithToast() {
 export function useUpdatePredictionWithToast() {
   const mutation = useUpdatePrediction();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.updatingPrediction'));
+      toast.txPending(text('toast.updatingPrediction'));
 
       try {
         const result = await mutation.mutateAsync(params);
         toast.success(
-          t('toast.predictionUpdated'),
-          t('toast.predictionUpdatedDesc')
+          text('toast.predictionUpdated'),
+          text('toast.predictionUpdatedDesc')
         );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.updatePredictionFailed');
+            : text('toast.updatePredictionFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -108,29 +108,29 @@ export function useUpdatePredictionWithToast() {
 export function useClaimWinningsWithToast() {
   const mutation = useClaimWinnings();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.claimingWinnings'));
+      toast.txPending(text('toast.claimingWinnings'));
 
       try {
         const result = await mutation.mutateAsync(params);
         toast.success(
-          t('toast.winningsClaimed'),
-          t('toast.winningsClaimedDesc')
+          text('toast.winningsClaimed'),
+          text('toast.winningsClaimedDesc')
         );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.claimWinningsFailed');
+            : text('toast.claimWinningsFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -148,24 +148,29 @@ export function useClaimWinningsWithToast() {
 export function useClaimRefundWithToast() {
   const mutation = useClaimRefund();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.claimingRefund'));
+      toast.txPending(text('toast.claimingRefund'));
 
       try {
         const result = await mutation.mutateAsync(params);
-        toast.success(t('toast.refundClaimed'), t('toast.refundClaimedDesc'));
+        toast.success(
+          text('toast.refundClaimed'),
+          text('toast.refundClaimedDesc')
+        );
         return result;
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : t('toast.claimRefundFailed');
+          error instanceof Error
+            ? error.message
+            : text('toast.claimRefundFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -183,26 +188,29 @@ export function useClaimRefundWithToast() {
 export function useCreateMarketWithToast() {
   const mutation = useCreateMarket();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.creatingMarket'));
+      toast.txPending(text('toast.creatingMarket'));
 
       try {
         const result = await mutation.mutateAsync(params);
-        toast.success(t('toast.marketCreated'), t('toast.marketCreatedDesc'));
+        toast.success(
+          text('toast.marketCreated'),
+          text('toast.marketCreatedDesc')
+        );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.createMarketFailed');
+            : text('toast.createMarketFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -220,26 +228,29 @@ export function useCreateMarketWithToast() {
 export function useResolveMarketWithToast() {
   const mutation = useResolveMarket();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.resolvingMarket'));
+      toast.txPending(text('toast.resolvingMarket'));
 
       try {
         const result = await mutation.mutateAsync(params);
-        toast.success(t('toast.marketResolved'), t('toast.marketResolvedDesc'));
+        toast.success(
+          text('toast.marketResolved'),
+          text('toast.marketResolvedDesc')
+        );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.resolveMarketFailed');
+            : text('toast.resolveMarketFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -257,29 +268,29 @@ export function useResolveMarketWithToast() {
 export function useResolveMarketWithOracleWithToast() {
   const mutation = useResolveMarketWithOracle();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.resolvingWithOracle'));
+      toast.txPending(text('toast.resolvingWithOracle'));
 
       try {
         const result = await mutation.mutateAsync(params);
         toast.success(
-          t('toast.marketResolved'),
-          t('toast.marketResolvedOracleDesc')
+          text('toast.marketResolved'),
+          text('toast.marketResolvedOracleDesc')
         );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.resolveMarketFailed');
+            : text('toast.resolveMarketFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -297,29 +308,29 @@ export function useResolveMarketWithOracleWithToast() {
 export function useRequestOracleResolutionWithToast() {
   const mutation = useRequestOracleResolution();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.requestingOracleResolution'));
+      toast.txPending(text('toast.requestingOracleResolution'));
 
       try {
         const result = await mutation.mutateAsync(params);
         toast.success(
-          t('toast.resolutionRequested'),
-          t('toast.resolutionRequestedDesc')
+          text('toast.resolutionRequested'),
+          text('toast.resolutionRequestedDesc')
         );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.requestOracleResolutionFailed');
+            : text('toast.requestOracleResolutionFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -337,29 +348,29 @@ export function useRequestOracleResolutionWithToast() {
 export function useCompleteOracleResolutionWithToast() {
   const mutation = useCompleteOracleResolution();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.completingOracleResolution'));
+      toast.txPending(text('toast.completingOracleResolution'));
 
       try {
         const result = await mutation.mutateAsync(params);
         toast.success(
-          t('toast.marketResolved'),
-          t('toast.marketResolvedOracleDesc')
+          text('toast.marketResolved'),
+          text('toast.marketResolvedOracleDesc')
         );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.completeOracleResolutionFailed');
+            : text('toast.completeOracleResolutionFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -377,24 +388,29 @@ export function useCompleteOracleResolutionWithToast() {
 export function useLockMarketWithToast() {
   const mutation = useLockMarket();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.lockingMarket'));
+      toast.txPending(text('toast.lockingMarket'));
 
       try {
         const result = await mutation.mutateAsync(params);
-        toast.success(t('toast.marketLocked'), t('toast.marketLockedDesc'));
+        toast.success(
+          text('toast.marketLocked'),
+          text('toast.marketLockedDesc')
+        );
         return result;
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : t('toast.lockMarketFailed');
+          error instanceof Error
+            ? error.message
+            : text('toast.lockMarketFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -412,29 +428,29 @@ export function useLockMarketWithToast() {
 export function useClaimLockRefundWithToast() {
   const mutation = useClaimLockRefund();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.claimingPartialRefund'));
+      toast.txPending(text('toast.claimingPartialRefund'));
 
       try {
         const result = await mutation.mutateAsync(params);
         toast.success(
-          t('toast.refundClaimed'),
-          t('toast.lockRefundClaimedDesc')
+          text('toast.refundClaimed'),
+          text('toast.lockRefundClaimedDesc')
         );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.claimLockRefundFailed');
+            : text('toast.claimLockRefundFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -452,29 +468,29 @@ export function useClaimLockRefundWithToast() {
 export function useCancelMarketWithToast() {
   const mutation = useCancelMarket();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.cancellingMarket'));
+      toast.txPending(text('toast.cancellingMarket'));
 
       try {
         const result = await mutation.mutateAsync(params);
         toast.success(
-          t('toast.marketCancelled'),
-          t('toast.marketCancelledDesc')
+          text('toast.marketCancelled'),
+          text('toast.marketCancelledDesc')
         );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.cancelMarketFailed');
+            : text('toast.cancelMarketFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {
@@ -492,26 +508,29 @@ export function useCancelMarketWithToast() {
 export function useWithdrawDealerFeesWithToast() {
   const mutation = useWithdrawDealerFees();
   const toast = useToastActions();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
 
   const mutateAsync = useCallback(
     async (params: Parameters<typeof mutation.mutateAsync>[0]) => {
-      toast.txPending(t('toast.withdrawingFees'));
+      toast.txPending(text('toast.withdrawingFees'));
 
       try {
         const result = await mutation.mutateAsync(params);
-        toast.success(t('toast.feesWithdrawn'), t('toast.feesWithdrawnDesc'));
+        toast.success(
+          text('toast.feesWithdrawn'),
+          text('toast.feesWithdrawnDesc')
+        );
         return result;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
-            : t('toast.withdrawFeesFailed');
+            : text('toast.withdrawFeesFailed');
         toast.txError(message);
         throw error;
       }
     },
-    [mutation, toast, t]
+    [mutation, toast, text]
   );
 
   return {

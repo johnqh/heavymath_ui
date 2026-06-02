@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
 import { useToast } from '@sudobility/components/ui/toast';
+import { useHeavymathUiText } from '../components/HeavymathUiTextProvider';
 
 /**
  * Extract user-friendly message from verbose viem/wagmi errors.
@@ -26,7 +26,7 @@ function shortenErrorMessage(message: string): string {
  * Transaction-specific toast helpers built on @sudobility/components toast.
  */
 export function useToastActions() {
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const toast = useToast();
 
   const fmt = (title: string, message?: string) =>
@@ -46,19 +46,22 @@ export function useToastActions() {
       toast.info(fmt(title, message), 5000),
     txPending: (message?: string) =>
       toast.info(
-        fmt(t('toast.txPending'), message || t('toast.confirmInWallet')),
+        fmt(text('toast.txPending'), message || text('toast.confirmInWallet')),
         5000
       ),
     txSuccess: (message?: string) =>
       toast.success(
-        fmt(t('toast.txConfirmed'), message || t('toast.txSuccessDefault')),
+        fmt(
+          text('toast.txConfirmed'),
+          message || text('toast.txSuccessDefault')
+        ),
         5000
       ),
     txError: (message?: string) =>
       toast.error(
         fmt(
-          t('toast.txFailed'),
-          message ? shortenErrorMessage(message) : t('toast.txErrorDefault')
+          text('toast.txFailed'),
+          message ? shortenErrorMessage(message) : text('toast.txErrorDefault')
         ),
         0
       ),

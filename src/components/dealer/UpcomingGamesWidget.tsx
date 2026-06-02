@@ -1,5 +1,4 @@
 import { Link, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import type { IndexerClient } from '@heavymath/indexer_client';
 import { isValidSportsOracleId, decodeOracleId } from '../../utils/oracleId';
@@ -17,6 +16,7 @@ import {
   HandballIcon,
   VolleyballIcon,
 } from '../../components/icons';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 const SPORT_ICONS: Record<
   SportCode,
@@ -92,7 +92,7 @@ export function UpcomingGamesWidget({
   dealerAddress,
 }: UpcomingGamesWidgetProps) {
   const { lang } = useParams<{ lang: string }>();
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const { data: sportCounts, isLoading } = useMarketCountsBySport(
     indexerClient,
     dealerAddress
@@ -100,9 +100,7 @@ export function UpcomingGamesWidget({
 
   return (
     <div className='p-6 rounded-lg border border-border bg-card'>
-      <h3 className='font-semibold mb-4'>
-        {t('dealer.marketsBySport', 'Markets by Sport')}
-      </h3>
+      <h3 className='font-semibold mb-4'>{text('dealer.marketsBySport')}</h3>
 
       {isLoading ? (
         <div className='space-y-2'>
@@ -112,12 +110,12 @@ export function UpcomingGamesWidget({
         </div>
       ) : !sportCounts || sportCounts.length === 0 ? (
         <div className='text-sm text-muted-foreground text-center py-4'>
-          <p>{t('dealer.noSportsMarkets', 'No sports markets yet')}</p>
+          <p>{text('dealer.noSportsMarkets')}</p>
           <Link
             to={`/${lang || 'en'}/sports`}
             className='text-primary hover:underline mt-2 inline-block'
           >
-            {t('dealer.browseSports', 'Browse sports to create markets')}
+            {text('dealer.browseSports')}
           </Link>
         </div>
       ) : (
@@ -133,11 +131,11 @@ export function UpcomingGamesWidget({
                 <div className='flex items-center gap-2'>
                   <Icon className='w-5 h-5 text-muted-foreground' />
                   <span className='text-sm font-medium'>
-                    {t(`nav.${slug}`, slug)}
+                    {text(`nav.${slug}`)}
                   </span>
                 </div>
                 <span className='text-sm text-muted-foreground'>
-                  {count} {count === 1 ? 'market' : 'markets'}
+                  {text('dealer.marketCount', { count })}
                 </span>
               </Link>
             );

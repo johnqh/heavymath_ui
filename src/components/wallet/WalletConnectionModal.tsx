@@ -6,7 +6,6 @@ import {
   useRef,
   type ReactNode,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useAccount, useConnect, useDisconnect, type Connector } from 'wagmi';
 import { ChainType } from '@sudobility/types';
 import { Modal, Logo } from '@sudobility/components';
@@ -19,6 +18,7 @@ import type { WalletOption } from '@sudobility/web3-components';
 import { useAuth } from '../../context/WalletAuthContext';
 import { AuthStatus } from '../../types/auth';
 import { getAppConfig } from '../../config/app';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 // Detect if browser supports extensions (Safari doesn't, Chrome/Firefox/Edge do)
 const supportsExtensions = () => {
@@ -68,7 +68,10 @@ const hasDesktopBrowserWallet = () => {
 };
 
 // Helper to get connector display name
-const getConnectorName = (connector: Connector): string => {
+const getConnectorName = (
+  connector: Connector,
+  unknownWalletLabel = 'unknown-wallet'
+): string => {
   if (connector.id === 'metaMask' || connector.id === 'io.metamask') {
     return 'MetaMask';
   }
@@ -90,7 +93,7 @@ const getConnectorName = (connector: Connector): string => {
   if (connector.name === 'Injected' || connector.name === 'Browser Wallet') {
     return 'Browser Wallet';
   }
-  return connector.name || 'Unknown Wallet';
+  return connector.name || unknownWalletLabel;
 };
 
 interface WalletConnectionModalProps {
@@ -105,7 +108,7 @@ export function WalletConnectionModal({
   onClose,
   socialLoginSection,
 }: WalletConnectionModalProps) {
-  const { t } = useTranslation('connectWalletPage');
+  const text = useHeavymathUiText();
   const { address, status, signVerificationMessage } = useAuth();
   const { connectors, connect } = useConnect();
   const { connector: activeConnector } = useAccount();
@@ -143,7 +146,9 @@ export function WalletConnectionModal({
     } else if (status === AuthStatus.Connected && step !== 'sign') {
       setStep('sign');
       if (activeConnector) {
-        setConnectedWalletProvider(getConnectorName(activeConnector));
+        setConnectedWalletProvider(
+          getConnectorName(activeConnector, text('fallbacks.unknownWallet'))
+        );
       }
       setConnectingWallet(null);
     } else if (status === AuthStatus.Disconnected && step !== 'connect') {
@@ -151,7 +156,7 @@ export function WalletConnectionModal({
       setConnectingWallet(null);
       setConnectedWalletProvider(null);
     }
-  }, [status, step, activeConnector, isOpen, onClose]);
+  }, [status, step, activeConnector, isOpen, onClose, text]);
 
   // Reset connection
   const resetConnection = useCallback(async () => {
@@ -201,23 +206,21 @@ export function WalletConnectionModal({
         } else {
           console.error('Failed to connect wallet:', err);
           setConnectingWallet(null);
-          setError(
-            t(
-              'errors.failedToConnect',
-              'Failed to connect wallet. Please try again.'
-            )
-          );
+          setError(text('errors.failedToConnect'));
         }
       }
     },
-    [connect, t]
+    [connect, text]
   );
 
   // Build stable wallet options - only rebuild when connectors array identity changes
   const walletOptionsBase = useMemo(() => {
     const seenWallets = new Set<string>();
     const uniqueConnectors = connectors.filter(connector => {
-      const walletName = getConnectorName(connector);
+      const walletName = getConnectorName(
+        connector,
+        text('fallbacks.unknownWallet')
+      );
 
       // Only show Browser Wallet on desktop when browser has built-in wallet
       if (walletName === 'Browser Wallet') {
@@ -239,8 +242,8 @@ export function WalletConnectionModal({
 
     // Sort: Browser Wallet first (if desktop), MetaMask second, Coinbase third, WalletConnect last
     const sortedConnectors = [...uniqueConnectors].sort((a, b) => {
-      const nameA = getConnectorName(a);
-      const nameB = getConnectorName(b);
+      const nameA = getConnectorName(a, text('fallbacks.unknownWallet'));
+      const nameB = getConnectorName(b, text('fallbacks.unknownWallet'));
 
       // Browser Wallet always first (only on desktop when detected)
       if (hasDesktopWallet) {
@@ -264,7 +267,10 @@ export function WalletConnectionModal({
     });
 
     return sortedConnectors.map(connector => {
-      const walletName = getConnectorName(connector);
+      const walletName = getConnectorName(
+        connector,
+        text('fallbacks.unknownWallet')
+      );
       const originalIndex = connectors.indexOf(connector);
       return {
         id: connector.id,
@@ -275,7 +281,7 @@ export function WalletConnectionModal({
         originalIndex,
       };
     });
-  }, [connectors, hasDesktopWallet, browserSupportsExtensions]);
+  }, [connectors, hasDesktopWallet, browserSupportsExtensions, text]);
 
   // Build final wallet options with connecting state and click handlers
   const evmWallets: WalletOption[] = useMemo(() => {
@@ -295,38 +301,28 @@ export function WalletConnectionModal({
     () => [
       {
         id: 'phantom',
-        name: t('walletNames.phantom', 'Phantom'),
+        name: text('walletNames.phantom'),
         available: true,
         connecting: connectingWallet === 'Phantom',
         chainType: 'solana' as const,
         onClick: () => {
           // Solana wallet connection not implemented yet
-          setError(
-            t(
-              'errors.solanaNotSupported',
-              'Solana wallet connection coming soon'
-            )
-          );
+          setError(text('errors.solanaNotSupported'));
         },
       },
       {
         id: 'solflare',
-        name: t('walletNames.solflare', 'Solflare'),
+        name: text('walletNames.solflare'),
         available: true,
         connecting: connectingWallet === 'Solflare',
         chainType: 'solana' as const,
         onClick: () => {
           // Solana wallet connection not implemented yet
-          setError(
-            t(
-              'errors.solanaNotSupported',
-              'Solana wallet connection coming soon'
-            )
-          );
+          setError(text('errors.solanaNotSupported'));
         },
       },
     ],
-    [t, connectingWallet]
+    [text, connectingWallet]
   );
 
   // Handle sign message
@@ -340,12 +336,7 @@ export function WalletConnectionModal({
       if (signed) {
         onClose();
       } else {
-        setError(
-          t(
-            'errors.defaultSigningError',
-            'Failed to sign message. Please try again.'
-          )
-        );
+        setError(text('errors.defaultSigningError'));
       }
     } catch (err: unknown) {
       console.error('Signing error:', err);
@@ -357,16 +348,9 @@ export function WalletConnectionModal({
         errorString.includes('canceled') ||
         errorString.includes('denied')
       ) {
-        setError(
-          t('errors.signingCanceled', 'Signing was canceled. Please try again.')
-        );
+        setError(text('errors.signingCanceled'));
       } else {
-        setError(
-          t(
-            'errors.defaultSigningError',
-            'Failed to sign message. Please try again.'
-          )
-        );
+        setError(text('errors.defaultSigningError'));
       }
     } finally {
       setIsSigning(false);
@@ -405,19 +389,13 @@ export function WalletConnectionModal({
               />
             )}
             {step === 'connect'
-              ? t('pageTitle.connect', 'Connect Your Wallet')
-              : t('pageTitle.verify', 'Verify Your Wallet')}
+              ? text('pageTitle.connect')
+              : text('pageTitle.verify')}
           </h1>
           <p className='text-gray-600 dark:text-gray-400'>
             {step === 'connect'
-              ? t(
-                  'pageDescription.connect',
-                  'Choose your preferred wallet to connect'
-                )
-              : t(
-                  'pageDescription.verify',
-                  'Sign the message to authenticate your identity'
-                )}
+              ? text('pageDescription.connect')
+              : text('pageDescription.verify')}
           </p>
         </div>
 
@@ -429,7 +407,7 @@ export function WalletConnectionModal({
                 <div className='flex items-center gap-3 my-4'>
                   <div className='flex-1 border-t border-gray-200 dark:border-gray-700' />
                   <span className='text-xs text-gray-500 dark:text-gray-400 uppercase font-medium'>
-                    {t('socialLogin.dividerText', 'OR')}
+                    {text('socialLogin.dividerText')}
                   </span>
                   <div className='flex-1 border-t border-gray-200 dark:border-gray-700' />
                 </div>
@@ -445,37 +423,22 @@ export function WalletConnectionModal({
               error={error}
               browserSupportsExtensions={browserSupportsExtensions}
               labels={{
-                ethereum: t('tabLabels.ethereum', 'Ethereum'),
-                solana: t('tabLabels.solana', 'Solana'),
-                available: t('walletStatus.available', 'Available'),
-                notAvailable: t('walletStatus.notAvailable', 'Not Available'),
-                noWalletText: t(
-                  'noWalletLinks.noWallet',
-                  "Don't have a wallet?"
+                ethereum: text('tabLabels.ethereum'),
+                solana: text('tabLabels.solana'),
+                available: text('walletStatus.available'),
+                notAvailable: text('walletStatus.notAvailable'),
+                noWalletText: text('noWalletLinks.noWallet'),
+                installMetaMask: text('noWalletLinks.installMetaMask'),
+                installPhantom: text('noWalletLinks.installPhantom'),
+                autoConnectTitle: text('walletBrowserAutoConnect.title'),
+                autoConnectDescription: text(
+                  'walletBrowserAutoConnect.description'
                 ),
-                installMetaMask: t(
-                  'noWalletLinks.installMetaMask',
-                  'Install MetaMask'
+                extensionsNotSupported: text(
+                  'browserCompatibility.extensionsNotSupported'
                 ),
-                installPhantom: t(
-                  'noWalletLinks.installPhantom',
-                  'Install Phantom'
-                ),
-                autoConnectTitle: t(
-                  'walletBrowserAutoConnect.title',
-                  'Connecting to your wallet...'
-                ),
-                autoConnectDescription: t(
-                  'walletBrowserAutoConnect.description',
-                  'We detected you are using a wallet browser. Automatically connecting...'
-                ),
-                extensionsNotSupported: t(
-                  'browserCompatibility.extensionsNotSupported',
-                  'Solana wallets require browser extension support'
-                ),
-                useChromeForSolana: t(
-                  'browserCompatibility.useChromeForSolana',
-                  'Please use Chrome, Firefox, or Edge to connect Solana wallets'
+                useChromeForSolana: text(
+                  'browserCompatibility.useChromeForSolana'
                 ),
               }}
             />
@@ -491,50 +454,29 @@ export function WalletConnectionModal({
             onSign={handleSignMessage}
             onUseDifferentWallet={resetConnection}
             labels={{
-              pageTitle: t('pageTitle.verify', 'Verify Your Wallet'),
-              pageDescription: t(
-                'pageDescription.verify',
-                'Sign the message to authenticate your identity'
+              pageTitle: text('pageTitle.verify'),
+              pageDescription: text('pageDescription.verify'),
+              connectedWalletLabel: text(
+                'verificationSection.connectedWalletLabel'
               ),
-              connectedWalletLabel: t(
-                'verificationSection.connectedWalletLabel',
-                'Connected wallet:'
+              ethereumChainLabel: text(
+                'verificationSection.ethereumChainLabel'
               ),
-              ethereumChainLabel: t(
-                'verificationSection.ethereumChainLabel',
-                'Ethereum'
+              solanaChainLabel: text('verificationSection.solanaChainLabel'),
+              signInEthereumTitle: text(
+                'verificationSection.signInEthereumTitle'
               ),
-              solanaChainLabel: t(
-                'verificationSection.solanaChainLabel',
-                'Solana'
+              signInEthereumDescription: text(
+                'verificationSection.signInEthereumDescription'
               ),
-              signInEthereumTitle: t(
-                'verificationSection.signInEthereumTitle',
-                'Sign-In with Ethereum'
+              signInSolanaTitle: text('verificationSection.signInSolanaTitle'),
+              signInSolanaDescription: text(
+                'verificationSection.signInSolanaDescription'
               ),
-              signInEthereumDescription: t(
-                'verificationSection.signInEthereumDescription',
-                "You'll be asked to sign a message to prove ownership of your wallet. This is gasless and secure."
-              ),
-              signInSolanaTitle: t(
-                'verificationSection.signInSolanaTitle',
-                'Sign-In with Solana'
-              ),
-              signInSolanaDescription: t(
-                'verificationSection.signInSolanaDescription',
-                "You'll be asked to sign a message to prove ownership of your wallet. This is gasless and secure."
-              ),
-              signMessageButton: t(
-                'verificationSection.signMessageButton',
-                'Sign Message'
-              ),
-              signingButton: t(
-                'verificationSection.signingButton',
-                'Signing...'
-              ),
-              useDifferentWallet: t(
-                'verificationSection.useDifferentWallet',
-                'Use a different wallet'
+              signMessageButton: text('verificationSection.signMessageButton'),
+              signingButton: text('verificationSection.signingButton'),
+              useDifferentWallet: text(
+                'verificationSection.useDifferentWallet'
               ),
             }}
           />

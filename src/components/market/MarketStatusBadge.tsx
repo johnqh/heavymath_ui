@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
 import type { MarketStatus } from '@heavymath/indexer_client';
 import { clsx } from 'clsx';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface MarketStatusBadgeProps {
   status: MarketStatus;
@@ -11,27 +11,27 @@ export function MarketStatusBadge({
   status,
   size = 'sm',
 }: MarketStatusBadgeProps) {
-  const { t } = useTranslation('market');
+  const text = useHeavymathUiText();
 
   const statusConfig: Record<string, { label: string; className: string }> = {
     Active: {
-      label: t('status.active'),
+      label: text('status.active'),
       className: 'bg-success-500/10 text-success-500 border-success-500/20',
     },
     Locked: {
-      label: t('status.locked', 'Locked'),
+      label: text('status.locked'),
       className: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
     },
     Resolved: {
-      label: t('status.resolved'),
+      label: text('status.resolved'),
       className: 'bg-primary/10 text-primary border-primary/20',
     },
     Cancelled: {
-      label: t('status.cancelled'),
+      label: text('status.cancelled'),
       className: 'bg-muted text-muted-foreground border-border',
     },
     Abandoned: {
-      label: t('status.abandoned'),
+      label: text('status.abandoned'),
       className: 'bg-danger-500/10 text-danger-500 border-danger-500/20',
     },
   };

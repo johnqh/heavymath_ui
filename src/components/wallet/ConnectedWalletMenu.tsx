@@ -1,5 +1,4 @@
 import { type FC, useMemo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ClipboardDocumentIcon,
@@ -16,6 +15,7 @@ import {
 } from '@sudobility/types';
 import { WalletDropdownMenu } from '@sudobility/web3-components';
 import { AuthStatus } from '../../types/auth';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface ConnectedWalletMenuProps {
   walletAddress: string;
@@ -34,7 +34,7 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
   authStatus,
   onDisconnect,
 }) => {
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const navigate = useNavigate();
   const { lang } = useParams<{ lang: string }>();
 
@@ -77,7 +77,7 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
     () => [
       {
         id: 'copy-address',
-        label: t('wallet.copyAddress', 'Copy Address'),
+        label: text('wallet.copyAddress'),
         icon: ClipboardDocumentIcon,
         onClick: handleCopyAddress,
       },
@@ -89,31 +89,31 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
       },
       {
         id: 'profile',
-        label: t('wallet.profile', 'Profile'),
+        label: text('wallet.profile'),
         icon: UserIcon,
         onClick: handleProfile,
       },
       {
         id: 'favorites',
-        label: t('wallet.favorites', 'Favorites'),
+        label: text('wallet.favorites'),
         icon: StarIcon,
         onClick: handleFavorites,
       },
       {
         id: 'dealer',
-        label: t('wallet.dealer', 'Dealer'),
+        label: text('wallet.dealer'),
         icon: BriefcaseIcon,
         onClick: handleDealer,
       },
       {
         id: 'portfolio',
-        label: t('wallet.portfolio', 'Portfolio'),
+        label: text('wallet.portfolio'),
         icon: TicketIcon,
         onClick: handlePortfolio,
       },
       {
         id: 'settings',
-        label: t('wallet.settings', 'Settings'),
+        label: text('wallet.settings'),
         icon: Cog6ToothIcon,
         onClick: handleSettings,
       },
@@ -125,13 +125,13 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
       },
       {
         id: 'disconnect',
-        label: t('buttons.disconnect', 'Disconnect'),
+        label: text('buttons.disconnect'),
         icon: ArrowRightOnRectangleIcon,
         onClick: handleDisconnect,
       },
     ],
     [
-      t,
+      text,
       handleCopyAddress,
       handleProfile,
       handleFavorites,
@@ -161,9 +161,9 @@ const ConnectedWalletMenu: FC<ConnectedWalletMenuProps> = ({
       chainType={ChainType.EVM}
       menuItems={menuItems}
       statusLabels={{
-        verified: t('wallet.statusVerified', 'Verified'),
-        connected: t('wallet.statusConnected', 'Connected'),
-        disconnected: t('wallet.statusDisconnected', 'Disconnected'),
+        verified: text('wallet.statusVerified'),
+        connected: text('wallet.statusConnected'),
+        disconnected: text('wallet.statusDisconnected'),
       }}
     />
   );

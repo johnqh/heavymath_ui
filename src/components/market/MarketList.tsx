@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
 import { MarketCard } from './MarketCard';
 import type { Market } from '@heavymath/indexer_client';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface MarketListProps {
   markets: Market[];
@@ -13,7 +13,7 @@ export function MarketList({
   isLoading = false,
   showCategory = true,
 }: MarketListProps) {
-  const { t } = useTranslation('markets');
+  const text = useHeavymathUiText();
 
   if (isLoading) {
     return (
@@ -31,8 +31,12 @@ export function MarketList({
         <div className='w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4'>
           <span className='text-2xl'>📊</span>
         </div>
-        <h3 className='text-lg font-semibold mb-2'>{t('empty.title')}</h3>
-        <p className='text-muted-foreground'>{t('empty.description')}</p>
+        <h3 className='text-lg font-semibold mb-2'>
+          {text('markets.empty.title')}
+        </h3>
+        <p className='text-muted-foreground'>
+          {text('markets.empty.description')}
+        </p>
       </div>
     );
   }

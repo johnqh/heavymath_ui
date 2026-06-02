@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useIndexer } from '../../context/IndexerContext';
 import { useGameMarkets } from '../../hooks/useGameMarkets';
 import { MarketCard } from './MarketCard';
 import { InlineCreateMarketForm } from './InlineCreateMarketForm';
 import type { SportCode } from '../../config/sportCodes';
 import { variants } from '@sudobility/design';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface GameMarketsSectionProps {
   sportCode: SportCode;
@@ -32,7 +32,7 @@ export function GameMarketsSection({
   variant = 'team-sport',
   gameStarted = false,
 }: GameMarketsSectionProps) {
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const { indexerClient } = useIndexer();
   const { data: markets, isLoading } = useGameMarkets(
     indexerClient,
@@ -43,16 +43,13 @@ export function GameMarketsSection({
 
   const hasMarkets = markets && markets.length > 0;
 
-  const noMarketsText = t(
-    'markets.noMarketsForGame',
-    'No prediction markets for this game yet.'
-  );
+  const noMarketsText = text('markets.noMarketsForGame');
 
   return (
     <div>
       <div className='flex flex-col sm:flex-row sm:items-center sm:gap-3 mb-4'>
         <h2 className='text-lg font-semibold'>
-          {t('markets.predictionMarkets', 'Prediction Markets')}
+          {text('markets.predictionMarkets')}
         </h2>
         {!isLoading && !hasMarkets && !isPolling && (
           <span className='text-sm text-muted-foreground'>{noMarketsText}</span>
@@ -91,7 +88,7 @@ export function GameMarketsSection({
               d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z'
             />
           </svg>
-          {t('markets.updatingMarkets', 'Updating prediction markets...')}
+          {text('markets.updatingMarkets')}
         </div>
       ) : null}
 

@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next';
 import { useIndexer } from '../../context/IndexerContext';
 import { useLeagueMarkets } from '../../hooks/useLeagueMarkets';
 import { MarketCard } from './MarketCard';
 import { TournamentMarketForm } from './TournamentMarketForm';
 import type { SportCode } from '../../config/sportCodes';
 import { variants } from '@sudobility/design';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface TeamOption {
   id: number;
@@ -27,7 +27,7 @@ export function LeagueMarketsSection({
   leagueName,
   teams,
 }: LeagueMarketsSectionProps) {
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const { indexerClient } = useIndexer();
   const { data: markets, isLoading } = useLeagueMarkets(
     indexerClient,
@@ -40,7 +40,7 @@ export function LeagueMarketsSection({
   return (
     <div>
       <h2 className='text-lg font-semibold mb-4'>
-        {t('markets.predictionMarkets', 'Prediction Markets')}
+        {text('markets.predictionMarkets')}
       </h2>
 
       {isLoading ? (
@@ -60,10 +60,7 @@ export function LeagueMarketsSection({
         </div>
       ) : (
         <p className='text-sm text-muted-foreground mb-4'>
-          {t(
-            'markets.noMarketsForLeague',
-            'No prediction markets for this league yet.'
-          )}
+          {text('markets.noMarketsForLeague')}
         </p>
       )}
 

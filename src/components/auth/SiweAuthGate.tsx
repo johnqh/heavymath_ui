@@ -16,7 +16,10 @@ import { useSignMessage } from 'wagmi';
 import { useAuth } from '../../context/WalletAuthContext';
 import { useIndexer } from '../../context/IndexerContext';
 import { useAuthStore } from '@sudobility/heavymath_indexer_client';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
+
 export function SiweAuthGate({ children }: { children: React.ReactNode }) {
+  const text = useHeavymathUiText();
   const { address, isConnected } = useAuth();
   const { indexerClient } = useIndexer();
   const { signMessageAsync } = useSignMessage();
@@ -63,7 +66,7 @@ export function SiweAuthGate({ children }: { children: React.ReactNode }) {
           `${domain} wants you to sign in with your Ethereum account:`,
           address,
           '',
-          'Sign in to HeavyMath to participate in discussions.',
+          text('auth.siweStatement'),
           '',
           `URI: ${origin}`,
           `Version: 1`,

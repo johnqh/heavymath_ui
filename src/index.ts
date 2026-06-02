@@ -121,6 +121,11 @@ export { useLeagueMarkets } from './hooks/useLeagueMarkets';
 export { useGameIdsWithMarkets } from './hooks/useFilteredSportsData';
 
 // Components - Market
+export {
+  HeavymathUiTextProvider,
+  useHeavymathUiText,
+} from './components/HeavymathUiTextProvider';
+export type { HeavymathUiTextMap } from './components/HeavymathUiTextProvider';
 export { MarketCard } from './components/market/MarketCard';
 export { MarketList } from './components/market/MarketList';
 export { MarketStatusBadge } from './components/market/MarketStatusBadge';

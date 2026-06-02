@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   Select,
   SelectTrigger,
@@ -18,6 +17,7 @@ import { getNow, toChainDate } from '../../utils/datetime';
 import { CATEGORIES } from '../../types/market';
 import type { SportCode } from '../../config/sportCodes';
 import { ui } from '@sudobility/design';
+import { useHeavymathUiText } from '../HeavymathUiTextProvider';
 
 interface TournamentOption {
   id: number;
@@ -45,7 +45,7 @@ export function TeamTournamentMarketForm({
   tournaments,
   preselectedTournamentId,
 }: TeamTournamentMarketFormProps) {
-  const { t } = useTranslation('common');
+  const text = useHeavymathUiText();
   const { isDealer, dealerTokenIds } = useAuth();
   const createMarket = useCreateMarketWithToast();
 
@@ -85,7 +85,7 @@ export function TeamTournamentMarketForm({
     return (
       <div className='rounded-lg border border-dashed border-amber-500/40 bg-amber-500/5 p-4'>
         <p className='text-sm text-amber-700 dark:text-amber-400'>
-          {t('dealer.noPermission')}
+          {text('dealer.noPermission')}
         </p>
       </div>
     );
@@ -119,12 +119,23 @@ export function TeamTournamentMarketForm({
 
     const verb =
       expectation === '1'
-        ? t('inlineCreateMarket.wins')
-        : t('inlineCreateMarket.doesNotWin');
+        ? text('inlineCreateMarket.wins')
+        : text('inlineCreateMarket.doesNotWin');
     const tournamentName =
-      selectedTournament?.name ?? `Tournament #${selectedTournamentId}`;
-    const title = `${teamName} ${verb} ${season} ${tournamentName}`;
-    const desc = `${tournamentName} ${season} — ${teamName} ${verb}`;
+      selectedTournament?.name ??
+      text('fallbacks.tournamentWithId', { id: selectedTournamentId });
+    const title = text('markets.teamTournamentTitle', {
+      team: teamName,
+      verb,
+      season,
+      tournament: tournamentName,
+    });
+    const desc = text('markets.teamTournamentDescription', {
+      team: teamName,
+      verb,
+      season,
+      tournament: tournamentName,
+    });
 
     await createMarket.mutateAsync({
       tokenId: BigInt(tokenId),
@@ -151,13 +162,7 @@ export function TeamTournamentMarketForm({
             <img src={teamLogo} alt='' className='w-5 h-5 object-contain' />
           )}
           <span className='font-medium'>
-            {t(
-              'markets.createTournamentMarketForTeam',
-              'Tournament Market for {{team}}',
-              {
-                team: teamName,
-              }
-            )}
+            {text('markets.createTournamentMarketForTeam', { team: teamName })}
           </span>
         </div>
         <svg
@@ -186,7 +191,7 @@ export function TeamTournamentMarketForm({
             {/* Tournament Selector */}
             <div className='flex-1 min-w-0'>
               <label className='block text-sm font-medium mb-2'>
-                {t('markets.selectTournament', 'Select Tournament')}
+                {text('markets.selectTournament')}
               </label>
               <Select
                 value={
@@ -198,10 +203,7 @@ export function TeamTournamentMarketForm({
               >
                 <SelectTrigger>
                   <SelectValue
-                    placeholder={t(
-                      'markets.selectTournamentPlaceholder',
-                      '-- Select a tournament --'
-                    )}
+                    placeholder={text('markets.selectTournamentPlaceholder')}
                   />
                 </SelectTrigger>
                 <SelectContent>
@@ -217,7 +219,7 @@ export function TeamTournamentMarketForm({
             {/* Expectation */}
             <div className='md:w-48'>
               <label className='block text-sm font-medium mb-2'>
-                {t('market.condition.expectation', 'Expectation')}
+                {text('market.condition.expectation')}
               </label>
               <div className='flex gap-1'>
                 <button
@@ -229,7 +231,7 @@ export function TeamTournamentMarketForm({
                       : 'border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
-                  {t('market.condition.wins', 'Wins')}
+                  {text('market.condition.wins')}
                 </button>
                 <button
                   type='button'
@@ -240,7 +242,7 @@ export function TeamTournamentMarketForm({
                       : 'border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
-                  {t('market.condition.doesNotWin', 'Does not win')}
+                  {text('market.condition.doesNotWin')}
                 </button>
               </div>
             </div>
@@ -248,7 +250,7 @@ export function TeamTournamentMarketForm({
             {/* Deadline */}
             <div className='md:w-52'>
               <label className='block text-sm font-medium mb-1'>
-                {t('markets.deadline', 'Deadline')}
+                {text('markets.deadline')}
               </label>
               <input
                 type='datetime-local'
@@ -258,10 +260,7 @@ export function TeamTournamentMarketForm({
               />
               {deadline && !isDeadlineValid && (
                 <p className='mt-1 text-xs text-red-500'>
-                  {t(
-                    'markets.deadlineMinimum',
-                    'Deadline must be at least 24 hours from now'
-                  )}
+                  {text('markets.deadlineMinimum')}
                 </p>
               )}
             </div>
@@ -273,8 +272,8 @@ export function TeamTournamentMarketForm({
               className='md:w-auto py-2.5 px-4 rounded-lg bg-primary text-primary-foreground font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors whitespace-nowrap'
             >
               {createMarket.isPending
-                ? t('markets.creating', 'Creating...')
-                : t('markets.create', 'Create')}
+                ? text('markets.creating')
+                : text('markets.create')}
             </button>
           </div>
 
@@ -284,13 +283,13 @@ export function TeamTournamentMarketForm({
               className={`mt-3 p-2.5 rounded-lg ${ui.background.muted}/50 text-sm`}
             >
               <span className='text-muted-foreground'>
-                {t('inlineCreateMarket.market')}{' '}
+                {text('inlineCreateMarket.market')}{' '}
               </span>
               <span className='font-medium'>
                 {teamName}{' '}
                 {expectation === '1'
-                  ? t('inlineCreateMarket.wins')
-                  : t('inlineCreateMarket.doesNotWin')}{' '}
+                  ? text('inlineCreateMarket.wins')
+                  : text('inlineCreateMarket.doesNotWin')}{' '}
                 {season} {selectedTournament.name}
               </span>
             </div>
