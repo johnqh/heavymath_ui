@@ -165,3 +165,10 @@ export * from './components/icons';
 export { DealerNFTList } from './components/dealer/DealerNFTList';
 export { DealerNFTSelector } from './components/dealer/DealerNFTSelector';
 export { UpcomingGamesWidget } from './components/dealer/UpcomingGamesWidget';
+
+// Components - Writings
+export { WritingsSection } from './components/writings';
+export type {
+  WritingsSectionProps,
+  WritingsArticleConfig,
+} from './components/writings';
