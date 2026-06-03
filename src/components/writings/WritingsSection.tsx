@@ -74,9 +74,7 @@ export function WritingsSection({
           const rawHtml = await marked(body);
           // Content is from our own static markdown files, sanitized via DOMPurify
           const sanitized = DOMPurify.sanitize(rawHtml);
-          const html = sanitized
-            .replace(/<h2/g, '<br/><h2')
-            .replace(/<h3/g, '<br/><h3');
+          const html = sanitized;
 
           loaded.push({
             slug: article.slug,
