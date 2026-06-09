@@ -35,35 +35,35 @@ export function MarketCard({ market, showCategory = true }: MarketCardProps) {
   return (
     <Link
       to={`/${lang}/markets/${market.id}`}
-      className='block p-6 rounded-lg border border-border bg-card hover:border-primary/50 transition-all hover:shadow-md'
+      className='block p-6 rounded-lg border border-border bg-card hover:border-primary/50 transition-all hover:shadow-md text-center'
     >
       {/* Header */}
-      <div className='flex items-start justify-between gap-4 mb-4'>
-        <div className='flex-1 min-w-0'>
-          {showCategory && (category || subcategory) && (
-            <div className='flex items-center gap-1.5 mb-1'>
-              {category && (
-                <span className='inline-block text-xs font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded'>
-                  {category}
-                </span>
-              )}
-              {subcategory && (
-                <span className='inline-block text-xs font-medium text-muted-foreground bg-muted px-1.5 py-0.5 rounded'>
-                  {subcategory}
-                </span>
-              )}
-              {conditionLabel && (
-                <span className='inline-block text-xs font-medium text-accent-foreground bg-accent px-1.5 py-0.5 rounded'>
-                  {conditionLabel}
-                </span>
-              )}
-            </div>
-          )}
-          <h3 className='font-semibold text-foreground line-clamp-2'>
-            {displayTitle}
-          </h3>
+      <div className='mb-4'>
+        <div className='flex justify-center mb-2'>
+          <MarketStatusBadge status={market.status} />
         </div>
-        <MarketStatusBadge status={market.status} />
+        {showCategory && (category || subcategory) && (
+          <div className='flex items-center justify-center gap-1.5 mb-1'>
+            {category && (
+              <span className='inline-block text-xs font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded'>
+                {category}
+              </span>
+            )}
+            {subcategory && (
+              <span className='inline-block text-xs font-medium text-muted-foreground bg-muted px-1.5 py-0.5 rounded'>
+                {subcategory}
+              </span>
+            )}
+            {conditionLabel && (
+              <span className='inline-block text-xs font-medium text-accent-foreground bg-accent px-1.5 py-0.5 rounded'>
+                {conditionLabel}
+              </span>
+            )}
+          </div>
+        )}
+        <h3 className='font-semibold text-foreground line-clamp-2'>
+          {displayTitle}
+        </h3>
       </div>
 
       {/* Description */}
@@ -74,24 +74,20 @@ export function MarketCard({ market, showCategory = true }: MarketCardProps) {
       )}
 
       {/* Footer */}
-      <div className='flex items-center justify-between pt-4 border-t border-border'>
-        <div className='flex items-center gap-2'>
-          <span className='text-xs text-muted-foreground'>
-            {text('market.dealer')}: {market.dealerAddress.slice(0, 6)}
-            ...
-            {market.dealerAddress.slice(-4)}
-          </span>
-        </div>
-        <div className='text-right'>
-          <span className='text-xs text-muted-foreground'>
-            {formatDate(market.createdAt)}
-          </span>
-        </div>
+      <div className='flex items-center justify-center gap-4 pt-4 border-t border-border'>
+        <span className='text-xs text-muted-foreground'>
+          {text('market.dealer')}: {market.dealerAddress.slice(0, 6)}
+          ...
+          {market.dealerAddress.slice(-4)}
+        </span>
+        <span className='text-xs text-muted-foreground'>
+          {formatDate(market.createdAt)}
+        </span>
       </div>
 
       {/* Status indicator */}
       {isActive && (
-        <div className='mt-3 flex items-center gap-2'>
+        <div className='mt-3 flex items-center justify-center gap-2'>
           <span className='w-2 h-2 bg-success-500 rounded-full animate-pulse'></span>
           <span className='text-xs text-success-500'>
             {text('market.openForPredictions')}
