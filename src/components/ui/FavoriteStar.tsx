@@ -68,8 +68,8 @@ export function FavoriteStar({
         ${buttonSizeClasses[size]}
         rounded-full
         transition-all duration-200
-        hover:bg-yellow-100 dark:hover:bg-yellow-900/30
-        focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2
+        hover:bg-warning/10
+        focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
         disabled:opacity-50 disabled:cursor-not-allowed
         inline-flex items-center gap-0.5
         ${className}
@@ -81,16 +81,14 @@ export function FavoriteStar({
         className={`
           ${sizeClasses[size]}
           ${isLoading ? 'animate-pulse' : ''}
-          ${favorited ? 'text-yellow-500 fill-yellow-500' : 'text-gray-400 hover:text-yellow-500'}
+          ${favorited ? 'text-warning fill-warning' : 'text-muted-foreground hover:text-warning'}
           transition-colors duration-200
         `}
       />
       {showCount && (
         <span
           className={`${countSizeClasses[size]} font-medium tabular-nums ${
-            favorited
-              ? 'text-yellow-600 dark:text-yellow-400'
-              : 'text-gray-500 dark:text-gray-400'
+            favorited ? 'text-warning' : 'text-muted-foreground'
           }`}
         >
           {count}

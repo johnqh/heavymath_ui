@@ -103,7 +103,7 @@ export function PredictionSlider({
 
         {/* Thumb */}
         <div
-          className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-white shadow-md transition-none ${getColor()} ${
+          className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-background shadow-md transition-none ${getColor()} ${
             disabled ? '' : 'hover:scale-110'
           }`}
           style={{ left: `${percentage}%` }}

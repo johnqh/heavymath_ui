@@ -323,10 +323,8 @@ export function InlineCreateMarketForm({
 
   if (!isPermissionLoading && !hasPermission) {
     return (
-      <div className='rounded-lg border border-dashed border-amber-500/40 bg-amber-500/5 p-4'>
-        <p className='text-sm text-amber-700 dark:text-amber-400'>
-          {text('dealer.noPermission')}
-        </p>
+      <div className='rounded-lg border border-dashed border-warning/40 bg-warning/5 p-4'>
+        <p className='text-sm text-warning'>{text('dealer.noPermission')}</p>
       </div>
     );
   }
@@ -487,7 +485,7 @@ export function InlineCreateMarketForm({
                     value={scoreExpectation}
                     onChange={e => setScoreExpectation(e.target.value)}
                     placeholder='3'
-                    className={`w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 ${ui.background.surface} text-sm`}
+                    className={`w-full px-3 py-2 rounded-lg border border-input ${ui.background.surface} text-sm`}
                   />
                 </div>
               </>
@@ -501,10 +499,10 @@ export function InlineCreateMarketForm({
                 type='datetime-local'
                 value={deadline}
                 onChange={e => setDeadline(e.target.value)}
-                className={`w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 ${ui.background.surface} text-sm`}
+                className={`w-full px-3 py-2 rounded-lg border border-input ${ui.background.surface} text-sm`}
               />
               {deadline && !isDeadlineValid && (
-                <p className='mt-1 text-xs text-red-500'>
+                <p className='mt-1 text-xs text-destructive'>
                   {text('markets.deadlineMinimum')}
                 </p>
               )}
@@ -530,7 +528,7 @@ export function InlineCreateMarketForm({
                     setTitleTouched(true);
                   }
                 }}
-                className={`w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 ${ui.background.surface} text-sm`}
+                className={`w-full px-3 py-2 rounded-lg border border-input ${ui.background.surface} text-sm`}
               />
             </div>
             <div className='flex-1 min-w-0'>
@@ -550,7 +548,7 @@ export function InlineCreateMarketForm({
                     setDescriptionTouched(true);
                   }
                 }}
-                className={`w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 ${ui.background.surface} text-sm`}
+                className={`w-full px-3 py-2 rounded-lg border border-input ${ui.background.surface} text-sm`}
               />
             </div>
           </div>

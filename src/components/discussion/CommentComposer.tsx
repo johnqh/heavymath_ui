@@ -50,7 +50,7 @@ export function CommentComposer({
 
   if (isLocked) {
     return (
-      <div className='p-4 text-center text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg'>
+      <div className='p-4 text-center text-sm text-muted-foreground bg-muted rounded-lg'>
         {text('discussion.closed')}
       </div>
     );
@@ -58,7 +58,7 @@ export function CommentComposer({
 
   if (!isAuthenticated) {
     return (
-      <div className='p-4 text-center text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg'>
+      <div className='p-4 text-center text-sm text-muted-foreground bg-muted rounded-lg'>
         {text('discussion.sign_in_to_comment')}
       </div>
     );
@@ -68,16 +68,16 @@ export function CommentComposer({
     <div className='space-y-2'>
       {/* Reply indicator */}
       {replyingTo && (
-        <div className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
+        <div className='flex items-center gap-2 text-sm text-muted-foreground'>
           <span>
             {text('discussion.replying_to')}{' '}
-            <span className='font-medium text-blue-600 dark:text-blue-400'>
+            <span className='font-medium text-primary'>
               {formatAddress(replyingTo.authorAddress)}
             </span>
           </span>
           <button
             onClick={onCancelReply}
-            className='text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+            className='text-muted-foreground hover:text-foreground'
           >
             x
           </button>
@@ -85,13 +85,13 @@ export function CommentComposer({
       )}
 
       {/* Tabs: Write / Preview */}
-      <div className='flex border-b border-gray-200 dark:border-gray-700'>
+      <div className='flex border-b border-border'>
         <button
           onClick={() => setShowPreview(false)}
           className={`px-3 py-1.5 text-sm font-medium border-b-2 -mb-px ${
             !showPreview
-              ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
+              ? 'border-primary text-primary'
+              : 'border-transparent text-muted-foreground hover:text-foreground'
           }`}
         >
           {text('discussion.write')}
@@ -100,8 +100,8 @@ export function CommentComposer({
           onClick={() => setShowPreview(true)}
           className={`px-3 py-1.5 text-sm font-medium border-b-2 -mb-px ${
             showPreview
-              ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
+              ? 'border-primary text-primary'
+              : 'border-transparent text-muted-foreground hover:text-foreground'
           }`}
         >
           {text('discussion.preview')}
@@ -110,7 +110,7 @@ export function CommentComposer({
 
       {/* Input / Preview */}
       {showPreview ? (
-        <div className='min-h-[80px] p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900'>
+        <div className='min-h-[80px] p-3 border border-border rounded-lg bg-card'>
           {content.trim() ? (
             <div className='prose prose-sm dark:prose-invert max-w-none'>
               <ReactMarkdown rehypePlugins={[rehypeSanitize]}>
@@ -118,7 +118,7 @@ export function CommentComposer({
               </ReactMarkdown>
             </div>
           ) : (
-            <span className='text-gray-400 text-sm'>
+            <span className='text-muted-foreground text-sm'>
               {text('discussion.nothing_to_preview')}
             </span>
           )}
@@ -131,17 +131,19 @@ export function CommentComposer({
           placeholder={text('discussion.post_comment')}
           rows={3}
           maxLength={2000}
-          className='w-full p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          className='w-full p-3 border border-input rounded-lg bg-background text-sm text-foreground placeholder-muted-foreground resize-y focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent'
         />
       )}
 
       {/* Footer: char count + submit */}
       <div className='flex items-center justify-between'>
-        <span className='text-xs text-gray-400'>{content.length}/2000</span>
+        <span className='text-xs text-muted-foreground'>
+          {content.length}/2000
+        </span>
         <button
           onClick={handleSubmit}
           disabled={!content.trim() || isSubmitting}
-          className='px-4 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+          className='px-4 py-1.5 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
         >
           {isSubmitting
             ? text('common.pendingEllipsis')

@@ -61,8 +61,8 @@ export function DealerNFTList({ tokenIds }: DealerNFTListProps) {
                 <span
                   className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${
                     hasPermissions
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                      : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+                      ? 'bg-success/10 text-success'
+                      : 'bg-warning/10 text-warning'
                   }`}
                 >
                   {hasPermissions

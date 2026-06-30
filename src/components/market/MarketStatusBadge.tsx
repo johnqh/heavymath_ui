@@ -20,7 +20,7 @@ export function MarketStatusBadge({
     },
     Locked: {
       label: text('status.locked'),
-      className: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+      className: 'bg-warning/10 text-warning border-warning/20',
     },
     Resolved: {
       label: text('status.resolved'),

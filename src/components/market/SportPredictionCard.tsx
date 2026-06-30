@@ -38,6 +38,7 @@ const SPORT_ICONS: Record<
   10: VolleyballIcon,
 };
 
+// category identity colors (data, not theme chrome) — one distinct color per sport
 const SPORT_COLORS: Record<SportCode, string> = {
   1: 'bg-green-500',
   2: 'bg-orange-500',
@@ -125,6 +126,7 @@ export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
               <div
                 className={`w-6 h-6 rounded-full ${sportColor} flex items-center justify-center flex-shrink-0`}
               >
+                {/* text-white sits on an arbitrary per-sport brand color (over-color scrim) */}
                 <SportIcon className='w-3.5 h-3.5 text-white' />
               </div>
             )}
@@ -178,7 +180,7 @@ export function SportPredictionCard({ prediction }: SportPredictionCardProps) {
             <button
               onClick={handleClaim}
               disabled={claimWinnings.isPending}
-              className='px-3 py-1.5 text-sm rounded-lg bg-success-500 text-white font-medium hover:bg-success-600 transition-colors disabled:opacity-50'
+              className='px-3 py-1.5 text-sm rounded-lg bg-success text-success-foreground font-medium hover:bg-success/90 transition-colors disabled:opacity-50'
             >
               {claimWinnings.isPending
                 ? text('sportPredictionCard.claiming')

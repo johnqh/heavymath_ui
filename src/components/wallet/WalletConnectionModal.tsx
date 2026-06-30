@@ -380,7 +380,7 @@ export function WalletConnectionModal({
           <div className='flex justify-center mb-6'>
             <Logo size='lg' logoText={getAppConfig().name} />
           </div>
-          <h1 className='text-2xl font-bold text-gray-900 dark:text-white mb-2 flex items-center justify-center gap-3'>
+          <h1 className='text-2xl font-bold text-foreground mb-2 flex items-center justify-center gap-3'>
             {step === 'sign' && connectedWalletProvider && activeConnector && (
               <WalletIcon
                 wallet={connectedWalletProvider}
@@ -392,7 +392,7 @@ export function WalletConnectionModal({
               ? text('pageTitle.connect')
               : text('pageTitle.verify')}
           </h1>
-          <p className='text-gray-600 dark:text-gray-400'>
+          <p className='text-muted-foreground'>
             {step === 'connect'
               ? text('pageDescription.connect')
               : text('pageDescription.verify')}
@@ -405,11 +405,11 @@ export function WalletConnectionModal({
               <>
                 {socialLoginSection}
                 <div className='flex items-center gap-3 my-4'>
-                  <div className='flex-1 border-t border-gray-200 dark:border-gray-700' />
-                  <span className='text-xs text-gray-500 dark:text-gray-400 uppercase font-medium'>
+                  <div className='flex-1 border-t border-border' />
+                  <span className='text-xs text-muted-foreground uppercase font-medium'>
                     {text('socialLogin.dividerText')}
                   </span>
-                  <div className='flex-1 border-t border-gray-200 dark:border-gray-700' />
+                  <div className='flex-1 border-t border-border' />
                 </div>
               </>
             )}

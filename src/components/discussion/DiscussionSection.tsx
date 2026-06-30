@@ -88,11 +88,11 @@ export function DiscussionSection({
     <div className='space-y-4'>
       {/* Comment list */}
       {isLoading ? (
-        <div className='py-8 text-center text-sm text-gray-500 dark:text-gray-400'>
+        <div className='py-8 text-center text-sm text-muted-foreground'>
           {text('common.loading')}
         </div>
       ) : comments.length === 0 ? (
-        <div className='py-8 text-center text-sm text-gray-500 dark:text-gray-400'>
+        <div className='py-8 text-center text-sm text-muted-foreground'>
           {text('discussion.no_comments')}
         </div>
       ) : (
@@ -112,7 +112,7 @@ export function DiscussionSection({
           {pagination && page * pagination.limit < pagination.total && (
             <button
               onClick={() => setPage(p => p + 1)}
-              className='w-full py-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
+              className='w-full py-2 text-sm text-primary hover:text-primary/80'
             >
               {text('discussion.load_more')}
             </button>
@@ -132,7 +132,7 @@ export function DiscussionSection({
 
       {/* Error display */}
       {postComment.isError && (
-        <div className='text-sm text-red-600 dark:text-red-400'>
+        <div className='text-sm text-destructive'>
           {postComment.error?.message || text('discussion.moderation_error')}
         </div>
       )}

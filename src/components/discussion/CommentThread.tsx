@@ -19,7 +19,7 @@ export function CommentThread({
   deletingCommentId,
 }: CommentThreadProps) {
   return (
-    <div className='border-b border-gray-100 dark:border-gray-800 last:border-b-0'>
+    <div className='border-b border-border last:border-b-0'>
       {/* Top-level comment */}
       <CommentItem
         comment={comment}
