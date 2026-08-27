@@ -1,5 +1,10 @@
 # CLAUDE.md - @sudobility/heavymath_ui
 
+> **Git policy — never auto-commit or auto-push.** Leave your work in the working tree.
+> Run `git commit`, `git push`, `gh pr create`, or `scripts/push_all.sh` **only when the user
+> explicitly asks in that turn**. Approval for an earlier change does not carry forward, and
+> finishing a task is not permission to commit it.
+
 ## Project Overview
 
 `@sudobility/heavymath_ui` is a shared UI component library for Heavymath prediction market apps. It provides React components, hooks, context providers, utilities, and configuration for wallet authentication, prediction markets, dealer management, sports data display, and discussion features.
@@ -448,3 +453,7 @@ heavymath_app / wcprediction_app  (consuming apps)
 ```
 
 This library provides the UI layer: components, hooks, contexts, and utilities that consuming apps compose into full pages. It depends on the indexer client and lib for data, and on contracts for on-chain interactions.
+
+## Git Workflow
+
+- Do not use feature branches for code changes. Always stay on the current branch.
