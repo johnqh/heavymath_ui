@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/heavymath_ui",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "Shared UI components, hooks, and utilities for Heavymath prediction market apps",
   "type": "module",
   "main": "dist/index.js",
@@ -28,7 +28,7 @@
   "peerDependencies": {
     "@sudobility/components": "^5.3.17",
     "@sudobility/design": "^1.1.52",
-    "@sudobility/di": "^1.5.63",
+    "@sudobility/di": "^1.5.65",
     "@sudobility/heavymath_contracts": "^0.1.75",
     "@sudobility/heavymath_indexer_client": "^0.0.61",
     "@sudobility/heavymath_lib": "^0.0.89",
@@ -51,7 +51,7 @@
     "@heroicons/react": "^2.2.0",
     "@sudobility/components": "^5.3.17",
     "@sudobility/design": "^1.1.52",
-    "@sudobility/di": "^1.5.63",
+    "@sudobility/di": "^1.5.65",
     "@sudobility/heavymath_contracts": "^0.1.75",
     "@sudobility/heavymath_indexer_client": "^0.0.61",
     "@sudobility/heavymath_lib": "^0.0.89",
