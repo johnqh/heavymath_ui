@@ -30,10 +30,14 @@ interface IndexerProviderProps {
  * @returns The provider wrapping children with IndexerClient access
  */
 export function IndexerProvider({ children }: IndexerProviderProps) {
-  const indexerClient = useMemo(
-    () => new IndexerClient(getAppConfig().indexerUrl, webNetworkClient),
-    []
-  );
+  const indexerClient = useMemo(() => {
+    const config = getAppConfig();
+    return new IndexerClient(
+      config.indexerUrl,
+      webNetworkClient,
+      config.testMode ?? false
+    );
+  }, []);
 
   const value: IndexerContextType = {
     indexerClient,
